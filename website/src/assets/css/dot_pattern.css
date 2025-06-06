@@ -1,0 +1,23 @@
+.dot-pattern-main {
+    webkit-filter: invert(0);
+    -webkit-mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%) add;
+    filter: invert(0);
+    flex: none;
+    inset: 0;
+    mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0) 100%) add;
+    mix-blend-mode: darken;
+    opacity: .2;
+    position: absolute;
+    z-index: 1;
+}
+
+.dot-pattern-main .dot-pattern-content {
+    position: absolute;
+    border-radius: inherit;
+    inset: 0px;
+    background-repeat: repeat;
+    background-position: left top;
+    background-size: 23.04px;
+    background-image: url(../images/dot_patter.svg);
+    border: 0px;
+}

@@ -1,0 +1,59 @@
+{
+    "organizations": {
+      "_id": "ObjectId", 
+      "org_id": "string", 
+      "name": "string", 
+      "created_at": "Date", 
+      "updated_at": "Date"
+    },
+    "ai_blogs": {
+      "_id": "ObjectId",
+      "org_id": "string",
+      "title": "string",
+      "content": "string",
+      "input_params": {
+        "prompt": "string",
+        "topic": "string",
+        "tone": "string",
+        "keywords": ["string"],
+        "word_count": "number"
+      },
+      "metadata": {
+        "tokens_used": "number",
+        "generation_time": "number",
+        "temperature": "number",
+        "model_used": "string"
+      },
+      "status": "string", // draft, scheduled, posted, failed
+      "platforms_status": [
+        {
+          "name": "string", // LinkedIn, Twitter, Website, etc.
+          "status": "string", // pending, posted, failed
+          "posted_at": "Date",
+          "post_url": "string",
+          "error": "string" // if failed
+        }
+      ],
+      "scheduled_at": "Date",
+      "created_at": "Date",
+      "updated_at": "Date"
+    },
+    "blog_analytics": {
+      "_id": "ObjectId",
+      "org_id": "string",
+      "blog_id": "ObjectId",
+      "platforms": [
+        {
+          "name": "string", // LinkedIn, Twitter, Website, etc.
+          "views": "number",
+          "likes": "number",
+          "shares": "number",
+          "comments": "number",
+          "engagement_score": "number"
+        }
+      ],
+      "created_at": "Date",
+      "updated_at": "Date"
+    }
+  }
+  

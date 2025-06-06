@@ -1,0 +1,43 @@
+{
+  "schedule_id": "1",
+  "org_id": "0d6b2d63-7057-467a-97d1-40dd9cc385bd",
+  "brand_id": "1",
+  "description": "An Automated AI Writer made to dominate Web Traffic and SEO.",
+  "industry": "Construction",
+  "category": "Project Management",
+  "language": "English_US",
+  "keywords": ["blogseo", "autoblogging"],
+  "media": ["linkedin", "instagram", "website_blog"],
+  "tone": "Storytelling",
+  "length": "Medium",
+
+  "imageRatioOption": "UNSPLASH",
+
+  "outlines": [
+    "Understanding the Basics: What is an Automated AI Writer?",
+    "Streamlining Content Creation with AI-Powered Automation",
+    "Effortless Keyword Integration for Better SEO Rankings",
+    "Consistent Blog Updates Without Burnout",
+    "Enhancing Readability and Engagement Through AI Writing",
+    "Tailoring Content Towards Your Target Audience Using Data",
+    "Cutting Costs Without Compromising Content Quality",
+    "Boosting Productivity with AI-Assisted Research and Drafting",
+    "Ensuring Originality and Avoiding Plagiarism with AI Innovations",
+    "Scaling Your Content Strategy for Faster Blog Growth",
+    "Evaluating the Pros and Cons of Using an AI Writer for BlogSEO",
+    "Future-Proofing Your Blog Strategy with Emerging AI Trends"
+  ],
+  "content": "## Understanding the Basics: What is an Automated AI Writer?\n\nI remember the first time I heard about automated AI writers. It sounded almost magical—like a tool that could read my mind and turn scattered id",
+  "coverImage": {
+    "alt": "Empty pool with debris, flanked by palm trees, symbolizes the outdated state of manual blogging before AI writer transformation for SEO.",
+    "url": "https://images.unsplash.com/photo-1566140157193-897033426b38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NjcwNzZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NDYyOTE0MjN8&ixlib=rb-4.0.3&q=80&w=1080"
+  },
+  "title": "10 Ways an Automated AI Writer Can Transform Your BlogSEO",
+  "words": 4004,
+  "metaDescription": "\"Discover 10 game-changing ways an AI writer supercharges BlogSEO & autoblogging. Elevate your content strategy, boost rankings, and let automation write your success story!\"",
+  "status": "done",
+  "createdAt": "1746291427889",
+  "updatedAt": "1746291427889",
+  "createdBy": "rajajayarubant@gmail.com",
+  "editedBy": "rajajayarubant@gmail.com"
+}

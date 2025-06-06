@@ -1,0 +1,263 @@
+.blogref-wrapper-main {
+    width: 100%;
+    max-width: var(--max-width);
+    height: max-content;
+
+    padding: var(--content-padding);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.blogref-wrapper-main .blogref-wrapper-header {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.blogref-wrapper-main .blogref-wrapper-header .header-title {
+    width: 80%;
+    font-size: var(--font-size-xl3);
+    line-height: 1;
+    font-weight: var(--font-weight-xl);
+
+    text-align: center;
+}
+
+.blogref-wrapper-main .blogref-wrapper-header .header-desc {
+    width: 60%;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-sm);
+
+    text-align: center;
+}
+
+.blogref-wrapper-main .blogref-wrapper-filters {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.blogref-wrapper-main .blogref-wrapper-filters .filters-items {
+    width: max-content;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.blogref-wrapper-main .blogref-wrapper-filters .filters-item {
+    width: max-content;
+    height: 100%;
+    padding: 0 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-xl);
+    border: 1px solid var(--border-color-100);
+
+    user-select: none;
+    cursor: pointer;
+
+    transition: all .25s;
+
+    font-size: var(--font-size-sm);
+    color: var(--font-dark-color);
+}
+
+.blogref-wrapper-main .blogref-wrapper-filters .filters-item:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.blogref-wrapper-main .blogref-wrapper-filters .filters-item-active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: var(--font-light-color);
+}
+
+.blogref-wrapper-main .blogref-wrapper-filters .filters-item-active:hover {
+    color: var(--font-light-color);
+    border-color: var(--primary-color);
+}
+
+.blogref-wrapper-main .blogref-wrapper-content {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-items {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item {
+    width: 350px;
+    min-width: 190px;
+    height: 400px;
+
+    border: 1px solid var(--border-color-100);
+    border-radius: var(--border-radius-xl);
+    cursor: pointer;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-banner {
+    width: 100%;
+    height: 50%;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-banner img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details {
+    width: 100%;
+    height: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 16px;
+
+    padding: 12px 24px;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-lg);
+
+    color: var(--font-dark-color);
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-tags {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-tag {
+    width: max-content;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 12px;
+
+    background: var(--bg-gray-color);
+    /* border: 1px solid var(--border-color-100); */
+    border-radius: var(--border-radius-xl);
+
+    font-size: var(--font-size-xs);
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-button {
+    width: max-content;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background: var(--bg-dark-color);
+
+    cursor: pointer;
+    /* border: 1px solid var(--border-color-100); */
+    padding: 0 16px;
+    border-radius: var(--border-radius-lg);
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-button .label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-sm);
+
+    color: var(--font-light-color);
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-button .icon {
+    width: max-content;
+    height: 14px;
+    /* margin-top: 3px; */
+}
+
+.blogref-wrapper-main .blogref-wrapper-content .content-item .item-details-button .icon svg {
+    width: inherit;
+    height: inherit;
+
+    fill: var(--font-light-color);
+}
+
+@media only screen and (max-width: 900px) {
+    .blogref-wrapper-main .blogref-wrapper-header .header-title {
+        width: 90%;
+        font-size: var(--font-size-xl3);
+    }
+
+    .blogref-wrapper-main .blogref-wrapper-header .header-desc {
+        width: 90%;
+    }
+
+    .blogref-wrapper-main .blogref-wrapper-filters {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
+
+    .blogref-wrapper-main .blogref-wrapper-filters,
+    .blogref-wrapper-main .blogref-wrapper-filters .filters-items {
+        justify-content: flex-start;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .blogref-wrapper-main {
+        gap: 16px;
+    }
+
+    .blogref-wrapper-main .blogref-wrapper-header .header-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .blogref-wrapper-main .blogref-wrapper-header .header-desc {
+        font-size: var(--font-size-xs);
+    }
+
+    .blogref-wrapper-main .blogref-wrapper-content .content-item {
+        width: 100%;
+    }
+
+}

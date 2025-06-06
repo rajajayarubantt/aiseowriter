@@ -1,0 +1,99 @@
+.integration-wrapper-main {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+
+    flex-shrink: 0;
+    margin: 2rem 0;
+
+    padding: 40px 0;
+    background: var(--bg-dark-color);
+}
+
+.integration-wrapper-main .integration-wrapper-title {
+    font-size: var(--font-size-xl2);
+    font-weight: var(--font-weight-xl);
+
+    text-align: center;
+
+    color: var(--font-light-color)
+}
+
+.integration-wrapper-main .integration-wrapper-content {
+    width: 100%;
+    height: 50px;
+
+    display: flex;
+    justify-content: flex-start;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%);
+    overflow: hidden;
+
+}
+
+.integration-wrapper-main .integration-wrapper-items {
+
+    width: max-content;
+    height: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 60px;
+
+    animation-name: loop;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-duration: 10951ms;
+
+}
+
+.integration-wrapper-main .integration-wrapper-item {
+    width: max-content;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.integration-wrapper-main .integration-wrapper-item .item-label {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-md);
+
+    color: var(--font-light-color);
+}
+
+.integration-wrapper-main .integration-wrapper-item img {
+    width: 50px;
+    height: 50px;
+
+    object-fit: contain;
+}
+
+
+@keyframes loop {
+    0% {
+        transform: translateX(30%);
+    }
+
+    100% {
+        transform: translateX(-40%);
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .integration-wrapper-main .integration-wrapper-title {
+        font-size: var(--font-size-xl);
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .integration-wrapper-main .integration-wrapper-title {
+        font-size: var(--font-size-lg);
+    }
+}

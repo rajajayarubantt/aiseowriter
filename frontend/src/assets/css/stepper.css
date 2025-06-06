@@ -1,0 +1,23 @@
+.stepper-line-main {
+    width: 100%;
+    height: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.stepper-line-main .stepper-line {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 1000px;
+    background: var(--bg-gray-color);
+
+    transition: all .25s;
+}
+
+.stepper-line-main .stepper-line-done {
+    background: var(--primary-color);
+}

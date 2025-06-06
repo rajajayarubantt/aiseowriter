@@ -1,0 +1,186 @@
+.usecase-wrapper-main {
+    width: 100%;
+    max-width: var(--max-width);
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    padding: var(--content-padding);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.usecase-wrapper-main .usecase-header {
+    width: 660px;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.usecase-wrapper-main .usecase-header .header-subtitle {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-md);
+
+    color: var(--font-dark-color);
+
+    text-transform: uppercase;
+}
+
+.usecase-wrapper-main .usecase-header .header-title {
+    font-size: var(--font-size-xl2);
+    font-weight: var(--font-weight-xl);
+
+    color: var(--font-dark-color);
+}
+
+.usecase-wrapper-main .usecase-header .header-desc {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xl);
+    font-weight: var(--font-weight-sm);
+
+    color: var(--font-dark-color);
+}
+
+
+.usecase-wrapper-main .usecase-sections {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content {
+    display: flex;
+    flex: 1.5 0 0px;
+
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item {
+    width: calc(49% - 12px);
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+
+    padding: 16px;
+
+    background: var(--bg-dark-color);
+    border-radius: var(--border-radius-xl);
+
+    position: relative;
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item .content-item-icon {
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1000px;
+    border: 1px solid var(--font-light-color);
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item .content-item-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--font-light-color);
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item .content-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item .content-item-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-xl);
+
+    color: var(--font-light-color);
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item .content-item-desc {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-sm);
+    color: var(--font-light-color);
+}
+
+.usecase-wrapper-main .usecase-sections .sections-content-item .content-item-button {
+    width: max-content;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-xl);
+
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-md);
+    color: var(--font-light-color);
+
+    cursor: pointer;
+}
+
+
+
+
+.usecase-wrapper-main .usecase-sections .sections-banner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    flex: 1 0 0px;
+
+    border-radius: var(--border-radius-xl);
+    background: linear-gradient(90deg, rgba(149, 186, 254, 1) 0%, rgba(204, 254, 217, 1) 100%);
+}
+
+.usecase-wrapper-main .usecase-sections .sections-banner img {
+    width: 95%;
+    height: max-content;
+
+    object-fit: contain;
+
+    /* border-radius: inherit; */
+}
+
+@media only screen and (max-width: 1000px) {
+    .usecase-wrapper-main .usecase-sections .sections-content {
+        width: 100%;
+    }
+
+    .usecase-wrapper-main .usecase-sections .sections-banner {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .usecase-wrapper-main .usecase-header {
+        width: 100%;
+    }
+
+    .usecase-wrapper-main .usecase-header .header-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .usecase-wrapper-main .usecase-header .header-title br {
+        display: none;
+    }
+
+    .usecase-wrapper-main .usecase-sections .sections-content-item {
+        width: 100%;
+    }
+}

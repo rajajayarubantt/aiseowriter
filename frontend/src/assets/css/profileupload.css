@@ -1,0 +1,49 @@
+.profile-upload-main {
+    width: max-content;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-upload-main .upload-preview {
+    height: 100px;
+    width: 100px;
+    border-radius: 1000px;
+
+    border: 1px solid var(--border-color-100);
+}
+
+.profile-upload-main .upload-preview img {
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+    object-fit: cover;
+
+}
+
+.profile-upload-main .upload-input-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.profile-upload-main .upload-input-main .input-label {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-md);
+    line-height: var(--line-height-md);
+
+    color: var(--font-dark-color);
+}
+
+.profile-upload-main .upload-input-main .input-desc {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-sm);
+    line-height: var(--line-height-md);
+
+    color: var(--font-gray-color);
+}
+
+.profile-upload-main .upload-input-main .file-input {
+    display: none;
+}

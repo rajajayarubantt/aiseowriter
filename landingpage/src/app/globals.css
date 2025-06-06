@@ -1,0 +1,364 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 0 0% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 3.9%;
+        --primary: 222 89% 55%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 222 89% 55%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem;
+
+        --circumference: calc(3.14159265358979 * 25* 2px)
+    }
+
+}
+
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+    animation-delay: 4s;
+}
+
+.bg-border {
+    background: #e5e5e5;
+}
+
+
+
+/* Add prose styling for blog content */
+.prose {
+    max-width: 1000px;
+}
+
+.prose strong {
+    color: var(--tw-prose-bold);
+    font-weight: 600;
+}
+
+.prose a {
+    color: var(--tw-prose-links);
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+    /* color: var(--tw-prose-headings); */
+    font-weight: 700;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    line-height: 1.1;
+}
+
+.prose h1 {
+    font-size: 2.25em;
+    margin-top: 0;
+}
+
+.prose h2 {
+    font-size: 1.5em;
+    margin-top: 2em;
+}
+
+.prose h3 {
+    font-size: 1.25em;
+}
+
+.prose h4 {
+    font-size: 1em;
+}
+
+.prose ul,
+.prose ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+}
+
+.prose ul {
+    list-style-type: disc;
+}
+
+.prose ol {
+    list-style-type: decimal;
+}
+
+.prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+}
+
+.prose {
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-links: hsl(var(--primary));
+    --tw-prose-bold: hsl(var(--foreground));
+}
+
+.prose-lg {
+    font-size: 1.125rem;
+    line-height: 1.75;
+}
+
+.popup-wrpper-main {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.popup-wrapper-center {
+    top: 50% !important;
+    left: 50% !important;
+
+    width: 100%;
+    height: 100%;
+
+    transform: translateX(-50%) translateY(-50%) !important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-wrpper-main .popup-block-ui {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    position: fixed;
+    backdrop-filter: blur(3px);
+    background: #6d73be4d;
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+:root {
+    --radius: 25;
+    --PI: 3.14159265358979;
+    --circumference: calc(var(--PI) * var(--radius) * 2px)
+}
+
+
+.loading-container {
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.loading-container .loading-logo {
+    width: 170px;
+    height: 40px;
+}
+
+.loading-container .loading-logo img {
+    width: inherit;
+    height: inherit;
+    object-fit: contain;
+}
+
+.loading-container .loading-spinner {
+
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.loading-container .loading-spinner-circle circle {
+    stroke: #4f46e5;
+    stroke-width: 4;
+    fill: transparent;
+    transform-origin: center;
+    stroke-dasharray: var(--circumference);
+    animation: spinner 2s ease-out infinite;
+}
+
+.loading-container .loading-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #303030;
+}
+
+@keyframes spinner {
+    from {
+        stroke-dashoffset: var(--circumference);
+        stroke: #4f46e5;
+        transform: rotateZ(0deg)
+    }
+
+    to {
+        stroke-dashoffset: calc(var(--circumference) * -1);
+        stroke: #4f46e5;
+        transform: rotateZ(720deg)
+    }
+}
+
+.alert-tost-popup-main {
+    position: fixed;
+    top: 2.5%;
+    right: 2.5%;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+
+    background: #fff;
+    color: #363636;
+    line-height: 1.3;
+    will-change: transform;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
+    min-width: 350px;
+    max-width: 550px;
+    height: 60px;
+    pointer-events: auto;
+    padding: 8px 10px;
+    border-radius: 8px;
+
+    animation: toastSliderY 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) 0s 1 normal forwards;
+    /* animation-delay: .2s; */
+}
+
+.hide-alert-tost-popup-main {
+    opacity: 1;
+
+    animation: toastSliderYReverse 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) 0s 1 normal forwards;
+    animation-delay: .2s;
+}
+
+.alert-tost-error {
+    background: rgb(255, 57, 57);
+    color: #fff;
+}
+
+.alert-tost-success {
+    background: rgb(46, 212, 122);
+    color: #fff;
+}
+
+.alert-tost-warning {
+    background: #f29d41;
+    color: #fff;
+}
+
+
+.alert-tost-popup-main .alert-tost-popup-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.alert-tost-popup-main .alert-tost-popup-content .label {
+    font-weight: 500;
+    font-size: 15px;
+    color: #fff;
+}
+
+.alert-tost-popup-main .alert-tost-popup-content .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.alert-tost-popup-main .alert-tost-popup-content .icon svg {
+    width: inherit;
+    height: inherit;
+}
+
+.alert-tost-popup-main .alert-tost-popup-content .icon svg path {
+    fill: #fff;
+}
+
+@keyframes toastSliderY {
+
+    0% {
+        transform: translateX(100%) scale(.5);
+        opacity: 0;
+
+    }
+
+    50% {
+        transform: translateX(-10%) scale(1.2);
+        opacity: 0.5;
+
+    }
+
+    100% {
+        transform: translateX(0%) scale(1);
+        opacity: 1;
+
+    }
+}
+
+@keyframes toastSliderYReverse {
+
+    0% {
+        transform: translateX(0%) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+
+
+        transform: translateX(120%);
+
+    }
+}

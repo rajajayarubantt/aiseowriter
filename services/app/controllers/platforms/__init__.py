@@ -1,0 +1,1 @@
+from app.controllers.platforms.platforms import PlatformsController

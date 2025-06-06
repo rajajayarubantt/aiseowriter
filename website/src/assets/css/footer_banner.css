@@ -1,0 +1,115 @@
+.footer_banner-wrapper-main {
+
+    width: 100%;
+    height: max-content;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 40px;
+
+    position: relative;
+
+    background: var(--bg-gray-color);
+}
+
+.footer_banner-wrapper-content {
+    z-index: 10;
+    width: 100%;
+    max-width: var(--max-width);
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+}
+
+.footer_banner-wrapper-content .content-subtitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer_banner-wrapper-content .content-subtitle .subtitle-logo {
+    width: 20px;
+    height: 20px;
+
+    object-fit: contain;
+}
+
+.footer_banner-wrapper-content .content-subtitle .subtitle-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-sm);
+
+    color: var(--font-dark-color);
+
+    text-transform: uppercase;
+
+}
+
+.footer_banner-wrapper-content .content-title {
+    font-size: var(--font-size-xl4);
+    line-height: 1;
+    font-weight: var(--font-weight-xl);
+
+    text-align: center;
+
+    color: var(--font-dark-color);
+
+}
+
+.footer_banner-wrapper-content .content-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+}
+
+.footer_banner-wrapper-content .content-steps .steps-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.footer_banner-wrapper-content .content-steps .steps-item .item-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.footer_banner-wrapper-content .content-steps .steps-item .item-icon svg {
+    width: inherit;
+    height: inherit;
+
+    fill: var(--font-dark-color);
+}
+
+.footer_banner-wrapper-content .content-steps .steps-item .item-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-md);
+
+    color: var(--font-dark-color);
+
+}
+
+@media only screen and (max-width: 700px) {
+    .footer_banner-wrapper-main {
+        gap: 16px;
+    }
+
+    .footer_banner-wrapper-content {
+        gap: 16px;
+    }
+
+    .footer_banner-wrapper-main .content-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .footer_banner-wrapper-content .content-steps {
+        flex-direction: column;
+        gap: 24px;
+    }
+}

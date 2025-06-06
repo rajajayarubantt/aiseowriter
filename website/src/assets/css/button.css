@@ -1,0 +1,141 @@
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.button-wrapper-direction-row {
+  flex-direction: row;
+}
+
+.button-wrapper-direction-column {
+  flex-direction: column;
+}
+
+.button-wrapper-align-start {
+  align-items: flex-start;
+}
+
+.button-wrapper-align-end {
+  align-items: flex-end;
+}
+
+.button-wrapper-align-center {
+  align-items: center;
+}
+
+.button {
+  width: max-content;
+  min-height: 2.5rem;
+  border-radius: var(--border-radius-xl);
+  padding: 0 24px;
+  background: var(--bg-gray-color);
+  outline: none;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease-in-out;
+}
+
+.button .button-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.button .button-icon svg {
+  width: inherit;
+  height: inherit;
+}
+
+.button .button-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-lg);
+  line-height: var(--line-height-md);
+
+  color: var(--font-dark-color);
+}
+
+/* Dark button */
+.button-dark {
+  background: var(--bg-dark-color);
+}
+
+.button-dark .button-icon svg {
+  fill: #fff;
+}
+
+.button-dark .button-label {
+  color: var(--font-light-color);
+}
+
+/* End Dark button */
+
+/* Primary button */
+.button-primary {
+  background: var(--primary-color);
+}
+
+.button-primary .button-icon svg {
+  fill: #fff;
+}
+
+.button-primary .button-label {
+  color: var(--font-light-color);
+}
+
+/* End Primary button */
+
+.button-disable {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+.button-outline {
+  background: var(--bg-color);
+  border: 1px solid var(--primary-color);
+  border-radius: var(--border-radius-xl);
+}
+
+.button-outline .button-label {
+  color: var(--primary-color);
+}
+
+.button-outline .button-icon svg {
+  fill: var(--primary-color);
+}
+
+/* Danger button */
+.button-danger {
+  background: var(--danger-color);
+}
+
+.button-danger .button-icon svg {
+  fill: #fff;
+}
+
+.button-danger .button-label {
+  color: var(--font-light-color);
+}
+
+/* End Danger button */
+
+@media only screen and (max-width: 700px) {
+  .button {
+    padding: 0 12px;
+  }
+
+  .button-wrapper {
+    gap: 8px;
+  }
+
+  .button .button-label {
+    font-size: var(--font-size-xxs);
+  }
+}

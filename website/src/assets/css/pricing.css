@@ -1,0 +1,438 @@
+.pricing-wrapper-main {
+    width: 100%;
+    height: max-content;
+
+    padding: var(--content-padding);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    margin: 2rem 0;
+
+    background: var(--bg-mid-dark-color);
+
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-content {
+    width: 100%;
+    max-width: var(--max-width);
+    height: max-content;
+
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+
+.pricing-wrapper-main .pricing-wrapper-header {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-header .header-title {
+    width: 80%;
+    font-size: var(--font-size-xl3);
+    line-height: 1;
+    font-weight: var(--font-weight-xl);
+
+    text-align: center;
+
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-header .header-desc {
+    width: 60%;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-sm);
+
+    text-align: center;
+
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-header .header-discount {
+    width: max-content;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+    border-radius: var(--border-radius-xl);
+
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-lg);
+
+    text-align: center;
+
+    color: var(--font-dark-color);
+
+    background-image: linear-gradient(to right, #4CF37B, #2340FE, #F001FF);
+
+    border: 2px solid var(--bg-color);
+}
+
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch {
+
+    width: max-content;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 10px;
+
+    background: var(--bg-color);
+    border-radius: 1000px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item {
+
+    width: max-content;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 24px;
+    transition: all .25s;
+    border-radius: 1000px;
+    cursor: pointer;
+
+    position: relative;
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .label {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-md);
+
+    color: var(--font-dark-color);
+
+    transition: all .25s;
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item-active {
+    background: var(--bg-dark-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item-active .label {
+
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .save {
+    position: absolute;
+    top: 120%;
+    right: -180%;
+
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    cursor: default;
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .save .save-icon {
+    width: max-content;
+    height: 20px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .save .save-icon svg {
+    width: inherit;
+    height: inherit;
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .save .save-icon svg path {
+    fill: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .save .save-label {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-md);
+
+    color: var(--font-light-color);
+
+    border: 1px solid var(--font-light-color);
+
+    padding: 6px 12px;
+    border-radius: var(--border-radius-xl);
+
+    white-space: nowrap;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items {
+    width: 100%;
+    height: max-content;
+
+    margin-top: 40px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-items {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item {
+    width: calc(33% - 16px);
+    height: 700px;
+
+    padding: 32px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+
+    border: 1px solid var(--font-light-color);
+    border-radius: var(--border-radius-xl);
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item-active {
+    border-color: var(--primary-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-header {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-header .header-label {
+    font-size: var(--font-size-lg);
+    /* line-height: var(--line-height-lg); */
+    font-weight: var(--font-weight-xl);
+
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-header .header-tag {
+
+    margin-top: 3px;
+
+    padding: 2px 6px;
+    background: var(--bg-color);
+    border-radius: var(--border-radius-md);
+
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xs);
+    font-weight: var(--font-weight-sm);
+
+    color: var(--font-dark-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-header .tag-active {
+
+    background: var(--primary-color);
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-price {
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-price .price-details {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-price .item-price-amount {
+
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xs);
+    font-weight: var(--font-weight-xl);
+
+    color: var(--font-light-color);
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-price .price-billed_label {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-sm);
+
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-price .item-price-label {
+
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    font-weight: var(--font-weight-sm);
+
+    color: var(--font-light-color);
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-start_button {
+
+    width: 100%;
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features {
+
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-billed_price {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+
+    color: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features .features-title {
+
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+
+    color: var(--font-light-color);
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features .features-items {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features .features-item {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features .features-item .item-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features .features-item .item-icon svg {
+    width: inherit;
+    height: inherit;
+
+    fill: var(--font-light-color);
+}
+
+.pricing-wrapper-main .pricing-wrapper-items .content-item .content-item-features .features-item .item-label {
+
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+    /* font-weight: var(--font-weight-md); */
+
+    color: var(--font-light-color);
+}
+
+
+@media only screen and (max-width: 1000px) {
+
+    .pricing-wrapper-main .pricing-wrapper-header .header-title {
+        width: 90%;
+        font-size: var(--font-size-xl3);
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-header .header-desc {
+        width: 90%;
+    }
+
+}
+
+@media only screen and (max-width: 900px) {
+    .pricing-wrapper-main .pricing-wrapper-items .content-item {
+        width: 100%;
+        min-height: 600px;
+        height: max-content;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+
+    .pricing-wrapper-main {
+        gap: 16px;
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-header .header-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-header .header-desc {
+        font-size: var(--font-size-xs);
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-content {
+        gap: 32px;
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-header .header-discount {
+        font-size: var(--font-size-xxs);
+
+        padding: 3px 6px;
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-duration_switch {
+        height: 30px;
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item {
+        height: 25px;
+        padding: 0 12px;
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .label {
+        font-size: var(--font-size-xxs);
+
+    }
+
+    .pricing-wrapper-main .pricing-wrapper-duration_switch .duration_switch-item .save {
+        display: none;
+    }
+
+}
