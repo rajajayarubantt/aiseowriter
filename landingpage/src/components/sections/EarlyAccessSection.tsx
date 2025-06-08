@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Check, CheckCircle, ArrowRight } from "lucide-react";
+import { sendGAEvent } from "@next/third-parties/google";
+
 import Button from "../ui/Button";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -86,6 +88,8 @@ const EarlyAccessSection: React.FC = () => {
 
     setIsSuccess(true);
     setEmail("");
+
+    sendGAEvent({ event: "buttonClicked", value: "Earlybird access request" });
 
     setTimeout(() => setIsSuccess(false), 5000);
   };

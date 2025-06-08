@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import LoaderUi from "../components/ui/LoaderUi";
 
 import type { Metadata } from "next";
@@ -32,6 +33,7 @@ export default function RootLayout({
           </Suspense>
         </div>
       </body>
+      <GoogleAnalytics gaId="G-7X6XSDE8CY" />
     </html>
   );
 }
