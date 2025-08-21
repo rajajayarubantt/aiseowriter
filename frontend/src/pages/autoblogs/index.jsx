@@ -265,7 +265,7 @@ const Index = () => {
             d.status = status.status
             d.status_key = status.status_key
             d.created_at = Utils.formateDateLabel({ ms: d.created_at })
-            d.completion_percent = d.articles.length / d.post_count * 100
+            d.completion_percent = d.articles.length / parseInt(d.post_count) * 100
             return d
         })
 

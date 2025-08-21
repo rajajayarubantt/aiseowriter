@@ -1,0 +1,161 @@
+.smart-panel-content-main {
+    width: 100%;
+    height: calc(100% - 100px);
+    display: flex;
+    flex-direction: column;
+}
+
+.smart-top-cards-main {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.smart-top-cards-main .smart-top-cards-items {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card {
+    width: calc(25% - 16px);
+    height: 100%;
+    /* background-image: linear-gradient(121deg, #e5efff, #e5f9ff); */
+    background: #fff;
+    box-shadow: 0px 2px 8px -2px rgba(21 21 21 / 0.08);
+    padding: 16px;
+    border-radius: 8px;
+    border: solid 0.5px #c6d4dc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all .25s;
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card:hover {
+    box-shadow: var(--shadow-lg)
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card .card-detials {
+    display: flex;
+    flex-direction: column;
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card .card-icon {
+
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card .card-icon[data-color] {
+    background-color: attr(data-color color, red);
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card .card-icon svg {
+    height: 24px;
+    color: inherit;
+}
+
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card .card-detials .card-value {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+    color: var(--font-dark-color);
+    display: flex;
+    align-items: center;
+}
+
+.smart-top-cards-main .smart-top-cards-items .smart-top-card .card-detials .card-label {
+    font-size: 15px;
+    text-align: left;
+    color: var(--font-dark-color);
+}
+
+
+@media only screen and (max-width: 1050px) {
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card {
+        width: calc(50% - 16px);
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .smart-top-cards-main {
+        height: 80px;
+    }
+
+    .smart-panel-content-main {
+        width: 100%;
+        height: calc(100% - 80px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card {
+        width: 200px;
+        padding: 12px;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items {
+        gap: 10px;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card .card-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card .card-icon svg {
+        height: 20px;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card .card-detials .card-label {
+        font-size: 13px;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card .card-detials .card-value {
+        font-size: 18px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+
+    .smart-panel-content-main {
+        width: 100%;
+        height: calc(100% - 200px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .smart-top-cards-main {
+        width: 100%;
+        height: max-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items {
+        flex-direction: column;
+    }
+
+    .smart-top-cards-main .smart-top-cards-items .smart-top-card {
+        width: 100%;
+        padding: 8px;
+    }
+
+}

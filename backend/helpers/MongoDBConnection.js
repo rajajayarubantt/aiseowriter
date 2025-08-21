@@ -75,7 +75,12 @@ class MongoConnection {
         }
         else {
             const collection = this.getCollection(collectionName);
-            return await collection.find(query, options).toArray();
+            const cursor = await collection.find(query, options)
+            const results = await cursor.toArray();
+
+            return {
+                items: results,
+            }
         }
     }
 

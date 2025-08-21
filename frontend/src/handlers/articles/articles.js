@@ -27,11 +27,41 @@ class Articles {
 
         return response
     }
+    async regenerate_title(params) {
+
+        const response = await this.apiHandler.request({
+            method: 'POST',
+            endpoint: "/articles/regenerate-title",
+            params: params,
+        })
+
+        return response
+    }
+    async regenerate_outlines(params) {
+
+        const response = await this.apiHandler.request({
+            method: 'POST',
+            endpoint: "/articles/regenerate-outlines",
+            params: params,
+        })
+
+        return response
+    }
     async generate_content(params) {
 
         const response = await this.apiHandler.request({
             method: 'POST',
             endpoint: "/articles/generate-content",
+            params: params,
+        })
+
+        return response
+    }
+    async update_article(params) {
+
+        const response = await this.apiHandler.request({
+            method: 'POST',
+            endpoint: "/articles/update-article",
             params: params,
         })
 

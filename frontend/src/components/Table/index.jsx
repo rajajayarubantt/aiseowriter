@@ -6,7 +6,7 @@ import Icons from '../../assets/Icons'
 import { Table } from 'antd';
 
 
-const Index = ({ columns = [], data = [], has_select = true, pagination = false, loading = false, onChange = () => { } }) => {
+const Index = ({ columns = [], data = [], maxHeight = 'max-content', has_select = true, pagination = false, loading = false, onChange = () => { } }) => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
@@ -38,6 +38,8 @@ const Index = ({ columns = [], data = [], has_select = true, pagination = false,
                 pagination={pagination}
                 loading={loading}
                 onChange={onChange}
+                style={{ maxHeight: maxHeight, overflowY: 'auto' }}
+
             />
         </>
     )

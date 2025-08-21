@@ -94,6 +94,8 @@ const NumberInput = ({
           onChange={handleValueChange}
         />
 
+        {max != Infinity && <div className="input-max-value">/ {max}</div>}
+
         {(invalid && invalid_label) && <div className="input-invalid-label">{invalid_label}</div>}
       </div>
     </div>

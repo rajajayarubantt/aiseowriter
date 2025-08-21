@@ -20,7 +20,8 @@ class Earlybirds {
 
         try {
 
-            await payloadValidator.Validate({ name: 'get_earlybirds_lists', req, res, payload: req.query })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'get_earlybirds_lists', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { user_id, user_name, user_email } = req
             const {
@@ -58,8 +59,8 @@ class Earlybirds {
 
         try {
 
-            await payloadValidator.Validate({ name: 'create_earlybirds_list', req, res, payload: req.body })
-
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'create_earlybirds_list', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const {
                 email, params

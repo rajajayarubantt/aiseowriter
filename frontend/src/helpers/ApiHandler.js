@@ -26,7 +26,6 @@ class ApiHandler {
 
 
             const url = base_url + endpoint
-            console.log(url, options, 'options');
 
             let response = await fetch(url, options);
             response = await response.json();

@@ -76,7 +76,7 @@
 
 .popup-container-main .popup-container-header .header-details-title {
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-md);
+    font-weight: var(--font-weight-lg);
     line-height: var(--line-height-md);
 
     color: var(--font-dark-color);

@@ -27,7 +27,7 @@ def create_app() -> FastAPI:
     app.state.cronjob_manager = cronjob_manager
 
     # Initialize Scheduler
-    # schedulerController = SchedulerController(app)
+    schedulerController = SchedulerController(app)
     # schedulerController.start()
 
     # Setup middlewares

@@ -19,7 +19,8 @@ class Users {
 
         try {
 
-            await payloadValidator.Validate({ name: 'get_users', req, res, payload: req.query })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'get_users', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -98,6 +99,18 @@ class Users {
                 message: "Failed to create user, Please try again!"
             })
 
+            let update_credit_query = {
+                payment_status: 'active',
+                org_id: org_id
+            }
+            let update_credit_data = {
+                $inc: {
+                    "plan_details.users_count": -1
+                }
+            }
+
+            await req.mongoDB.updateOne(mysqlTables.SUBSCRIPTIONS, update_credit_query, update_credit_data)
+
 
             return responseHandler.successRequest({
                 name: 'create_user',
@@ -165,7 +178,8 @@ class Users {
     async delete_user(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'delete_user', req, res, payload: req.body })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'delete_user', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const { id } = req.body
@@ -187,6 +201,18 @@ class Users {
                 req, res,
                 message: "Failed to delete user, Please try again!"
             })
+
+            let update_credit_query = {
+                payment_status: 'active',
+                org_id: org_id
+            }
+            let update_credit_data = {
+                $inc: {
+                    "plan_details.users_count": +1
+                }
+            }
+
+            await req.mongoDB.updateOne(mysqlTables.SUBSCRIPTIONS, update_credit_query, update_credit_data)
 
             return responseHandler.successRequest({
                 name: 'delete_user',

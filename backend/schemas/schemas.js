@@ -88,16 +88,38 @@ const Articles_Schemas = {
     id: Joi.string().allow('', null),
     columns: Joi.string().allow('', null),
     search: Joi.string().allow('', null),
+    slug: Joi.string().allow('', null),
+    category: Joi.string().allow('', null),
     page: Joi.number().allow(null),
     limit: Joi.number().allow(null),
   }),
   generate_title: Joi.object({
+    id: Joi.string().allow(null, ''),
     keywords: Joi.array(),
-    cover_image: Joi.string().required(),
+    cover_image: Joi.string().allow(null, ''),
     language: Joi.string().required(),
     brand_id: Joi.number().allow(null),
+    brand_name: Joi.string().allow(null),
     description: Joi.string().allow('', null),
-
+  }),
+  generate_content: Joi.object({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    keywords: Joi.array(),
+    outlines: Joi.array(),
+    description: Joi.string().allow(null, ''),
+    language: Joi.string().allow(null, ''),
+    brand_name: Joi.string().allow(null, ''),
+    tone: Joi.string().allow(null, ''),
+    view: Joi.string().allow(null, ''),
+    length: Joi.string().allow(null, ''),
+    inter_links: Joi.boolean(),
+  }),
+  update_article: Joi.object({
+    id: Joi.string().required(),
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+    cover_image: Joi.object()
   }),
   delete_article: Joi.object({
     id: Joi.string().required(),
@@ -119,6 +141,7 @@ const Campaigns_Schemas = {
     cover_image: Joi.string().required(),
     language: Joi.string().required(),
     brand_id: Joi.number().allow(null),
+    brand_name: Joi.string().allow(null),
     description: Joi.string().allow('', null),
 
     name: Joi.string().required(),
@@ -143,11 +166,40 @@ const Campaigns_Schemas = {
 
 const Integration_Schemas = {
   auth_integration: Joi.object({
-    app: Joi.string().required().allow(...ALLOWED_PLATFORMS)
+    app: Joi.string().required().allow(...ALLOWED_PLATFORMS),
+    details: Joi.string().allow(null, '')
+  }),
+  update_integration: Joi.object({
+    app: Joi.string().required().allow(...ALLOWED_PLATFORMS),
+    details: Joi.object().required()
+  }),
+  get_schema: Joi.object({
+    app: Joi.string().required().allow(...ALLOWED_PLATFORMS),
+    details: Joi.object().required()
   }),
   linkedin_auth_callback: Joi.object({
     code: Joi.string().required(),
     state: Joi.string().required()
+  }),
+  wordpressorg_auth_callback: Joi.object({
+    code: Joi.string().required(),
+    state: Joi.string().required()
+  }),
+  notion_auth_callback: Joi.object({
+    code: Joi.string().required(),
+    state: Joi.string().required()
+  }),
+  webflow_auth_callback: Joi.object({
+    code: Joi.string().required(),
+    state: Joi.string().required()
+  }),
+  shopify_auth_callback: Joi.object({
+    code: Joi.string().required(),
+    state: Joi.string().required(),
+    shop: Joi.string().allow(null, ''),
+    hmac: Joi.string().allow(null, ''),
+    timestamp: Joi.string().allow(null, ''),
+    host: Joi.string().allow(null, ''),
   }),
   delete_connection: Joi.object({
     id: Joi.string().required(),
@@ -185,6 +237,46 @@ const Brands_Schemas = {
     logo: Joi.string().allow(''),
   }),
   delete_brand: Joi.object({
+    id: Joi.string().required(),
+  }),
+
+
+}
+const Platforms_Schemas = {
+
+  post_platform: Joi.object({
+    article_id: Joi.string().required(),
+    platform: Joi.string().required()
+  }),
+
+
+}
+const Sitemap_Schemas = {
+
+  get_sitemaps: Joi.object({
+    id: Joi.string().allow('', null),
+    columns: Joi.string().allow('', null),
+    search: Joi.string().allow('', null),
+
+
+  }),
+  update_sitemap: Joi.object({
+    id: Joi.string().required(),
+    data: Joi.object().required(),
+  }),
+  activate_sitemap: Joi.object({
+    id: Joi.string().required(),
+  }),
+  import_sitemap: Joi.object({
+    sitemap_url: Joi.string().required(),
+
+  }),
+  refresh_sitemap: Joi.object({
+    id: Joi.string().required(),
+
+  }),
+
+  delete_sitemap: Joi.object({
     id: Joi.string().required(),
   }),
 
@@ -239,11 +331,98 @@ const PublicBlogs_Schemas = {
     slug: Joi.string().allow('', null),
     search: Joi.string().allow('', null),
     category: Joi.string().allow('', null),
-    page: Joi.number(),
-    limit: Joi.number(),
+    projection: Joi.string().allow('', null),
+    page: Joi.number().allow(null),
+    limit: Joi.number().allow(null),
   })
 
 
 }
 
-module.exports = { ...Auth_Schemas, ...Schedules_Schemas, ...Articles_Schemas, ...Campaigns_Schemas, ...Integration_Schemas, ...Brands_Schemas, ...Users_Schemas, ...Earlybirds_Schemas, ...PublicBlogs_Schemas };
+const Subscriptions_Schemas = {
+  get_subscription_plans: Joi.object({
+    id: Joi.string().allow('', null),
+    search: Joi.string().allow('', null),
+    projection: Joi.string().allow('', null),
+    page: Joi.number().allow(null),
+    limit: Joi.number().allow(null),
+  }),
+}
+
+const Admin_Schemas = {
+
+  admin_register: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+
+  admin_get_articles: Joi.object({
+    id: Joi.string().allow('', null),
+    slug: Joi.string().allow('', null),
+    search: Joi.string().allow('', null),
+    category: Joi.string().allow('', null),
+    projection: Joi.string().allow('', null),
+    page: Joi.number().allow(null),
+    limit: Joi.number().allow(null),
+  }),
+  admin_generate_title: Joi.object({
+    keywords: Joi.array(),
+    cover_image: Joi.string().required(),
+    language: Joi.string().required(),
+    brand_id: Joi.number().allow(null),
+    description: Joi.string().allow('', null),
+
+  }),
+  admin_delete_article: Joi.object({
+    id: Joi.string().required(),
+  }),
+
+  admin_get_plans: Joi.object({
+    id: Joi.string().allow('', null),
+    search: Joi.string().allow('', null),
+    projection: Joi.string().allow('', null),
+    page: Joi.number().allow(null),
+    limit: Joi.number().allow(null),
+  }),
+  admin_create_plans: Joi.object({
+    name: Joi.string().required(),
+    monthly_plan_id: Joi.string().required(),
+    yearly_plan_id: Joi.string().required(),
+    blog_count: Joi.string().required(),
+    image_count: Joi.string().required(),
+    keywords_count: Joi.string().required(),
+    monthly_price: Joi.string().required(),
+    sitemap_count: Joi.string().required(),
+    status: Joi.string().required(),
+    users_count: Joi.string().required(),
+    recommended: Joi.boolean().required(),
+    is_freeplan: Joi.boolean().required(),
+    features: Joi.array(),
+  }),
+  admin_update_plans: Joi.object({
+    id: Joi.string().required(),
+    name: Joi.string().required(),
+    monthly_plan_id: Joi.string().required(),
+    yearly_plan_id: Joi.string().required(),
+    blog_count: Joi.string().required(),
+    image_count: Joi.string().required(),
+    keywords_count: Joi.string().required(),
+    monthly_price: Joi.string().required(),
+    sitemap_count: Joi.string().required(),
+    status: Joi.string().required(),
+    users_count: Joi.string().required(),
+    recommended: Joi.boolean().required(),
+    is_freeplan: Joi.boolean().required(),
+    features: Joi.array(),
+  }),
+  admin_delete_plans: Joi.object({
+    id: Joi.string().required()
+  }),
+
+  admin_create_subscription: Joi.object({
+    subscription_id: Joi.string().required(),
+    status: Joi.string().required(),
+  }),
+}
+
+module.exports = { ...Auth_Schemas, ...Admin_Schemas, ...Subscriptions_Schemas, ...Platforms_Schemas, ...Schedules_Schemas, ...Sitemap_Schemas, ...Articles_Schemas, ...Campaigns_Schemas, ...Integration_Schemas, ...Brands_Schemas, ...Users_Schemas, ...Earlybirds_Schemas, ...PublicBlogs_Schemas };

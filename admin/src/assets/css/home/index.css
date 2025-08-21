@@ -1,0 +1,214 @@
+.home-container-main {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  padding: 6rem;
+}
+
+.home-container-main .home-container-content {
+  width: 100%;
+  max-width: 800px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.home-container-main .home-container-content .content-head {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-container-main .home-container-content .content-head .head-title {
+  font-size: var(--font-size-xl4);
+  font-weight: var(--font-weight-xl);
+  line-height: var(--line-height-lg);
+  letter-spacing: -0.025em;
+  text-align: center;
+
+  color: var(--font-black-color);
+}
+
+.home-container-main .home-container-content .content-head .head-desc {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-xl);
+  line-height: var(--line-height-lg);
+  letter-spacing: -0.025em;
+  text-align: center;
+
+  color: var(--font-black-color);
+}
+
+.home-container-main .content-workspace-main {
+  width: 100%;
+  height: max-content;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  margin-bottom: 50px;
+}
+
+.home-container-main .workspace-filters {
+  width: 100%;
+  height: max-content;
+
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.home-container-main .workspace-filter {
+  width: 200px;
+}
+
+.home-container-main .workspace-textarea-main {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.home-container-main .workspace-textarea-main .workspace-textarea-input {
+  width: 100%;
+  height: max-content;
+}
+
+.home-container-main .workspace-textarea-main .workspace-textarea-input .input-main .textarea-input-main {
+  height: 250px;
+}
+
+
+.blog_generation-result-main {
+  width: 100%;
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.blog_generation-result-main .blog_generation-result-content {
+  width: 100%;
+  height: max-content;
+
+  padding: 40px;
+  background: var(--bg-gray-color);
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  position: relative;
+}
+
+.blog_generation-result-main .blog_generation-result-content a {
+  color: var(--primary-color);
+}
+
+.blog_generation-result-main .blog_generation-result-tools {
+
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 100;
+  width: 100%;
+  height: max-content;
+
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item {
+  width: max-content;
+  height: max-content;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+
+  background: var(--bg-color);
+  border: 1px solid var(--border-color-100);
+  box-shadow: var(--shadow-sm);
+  border-radius: 1000px;
+  padding: 6px 12px;
+}
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item .tools-item-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item .tools-item-icon svg {
+  width: inherit;
+  height: inherit;
+
+  fill: var(--font-dark-color);
+}
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item .tools-item-label {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+
+  color: var(--font-dark-color);
+}
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item-primary {
+  background: var(--primary-color);
+}
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item-primary .tools-item-icon svg {
+  fill: var(--font-light-color);
+}
+
+.blog_generation-result-main .blog_generation-result-tools .tools-item-primary .tools-item-label {
+  color: var(--font-light-color);
+}
+
+
+@media only screen and (max-width: 900px) {
+  .home-container-main {
+    padding: 2rem;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .home-container-main {
+    padding: 8px;
+  }
+
+  .home-container-main .workspace-filter {
+    width: 100%;
+  }
+
+  .home-container-main .workspace-textarea-main .workspace-textarea-input .input-main .textarea-input-main {
+    height: 150px;
+  }
+
+  .blog_generation-result-main .blog_generation-result-content {
+    padding: 16px;
+    padding-top: 60px;
+  }
+}

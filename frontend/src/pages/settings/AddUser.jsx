@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 /*Assets*/
 import Images from "../../assets/Images";
@@ -27,6 +28,8 @@ const AddUser = ({ type = 'create', callback = () => { } }) => {
     const { id } = useParams()
 
     const TITLE = `${type == 'edit' ? 'Update' : type == 'create' ? 'Add new' : ''} User`
+
+    const store = useSelector(state => state)
 
     const [isLoading, setIsLoading] = useState(false)
     const [warningAlert, setWarningAlert] = useState(false)
@@ -176,7 +179,13 @@ const AddUser = ({ type = 'create', callback = () => { } }) => {
         if (type != 'create' && !id) navigator(-1)
         if (type != 'create' && id) getUser({ id })
     }, [])
+    useEffect(() => {
 
+        if (store.user.subscription.limitations && store.user.subscription.limitations.users <= 0) {
+            return navigator(-1)
+        }
+
+    }, [store.user.subscription])
 
     return (
         <>

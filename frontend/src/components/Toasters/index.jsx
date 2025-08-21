@@ -16,6 +16,10 @@ const Index = ({ id, props }) => {
 
     useEffect(() => {
         message[type](_message)
+
+        setTimeout(() => {
+            callback()
+        }, 1000)
     }, [])
 
 

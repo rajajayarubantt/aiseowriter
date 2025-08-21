@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
+import { useSelector } from 'react-redux'
+import { Popconfirm } from 'antd';
 /*Assets*/
 import Images from "../../assets/Images";
 import Icons from "../../assets/Icons";
@@ -16,7 +17,7 @@ import Cards from '../../components/Cards'
 import { PageContainer, PageHeader } from '../../components/Page'
 
 /* Sub Pages */
-import AddCampaign from "./AddUser";
+import AddUser from "./AddUser";
 
 /*Helpers*/
 import Utils from "../../helpers/utils";
@@ -35,6 +36,10 @@ const Index = () => {
 
     const PAGE_TITLE = "Settings"
     const PAGE_DESC = "Effortlessly manage your workspace, users, and personal account with seamless control and efficiency."
+
+    const store = useSelector(state => state)
+
+    const [HasNoLimit, setHasNoLimit] = useState(true)
 
     const [isLoading, setIsLoading] = useState(false)
     const [warningAlert, setWarningAlert] = useState(false)
@@ -314,6 +319,13 @@ const Index = () => {
         getUser()
     }, [])
 
+    useEffect(() => {
+
+        if (store.user.subscription.limitations) setHasNoLimit(store.user.subscription.limitations.users <= 0)
+
+    }, [store.user.subscription])
+
+
     return (
         <>
             {isLoading ?
@@ -333,8 +345,8 @@ const Index = () => {
                     }} />
                 : null}
             <Routes>
-                <Route exact path={`/add-user`} element={<AddCampaign type="create" callback={getUser} />}></Route>
-                <Route exact path={`/edit-user/:id`} element={<AddCampaign type="edit" callback={getUser} />}></Route>
+                <Route exact path={`/add-user`} element={<AddUser type="create" callback={getUser} />}></Route>
+                <Route exact path={`/edit-user/:id`} element={<AddUser type="edit" callback={getUser} />}></Route>
             </Routes>
 
             <PageContainer id={PAGE_ID}>
@@ -456,10 +468,17 @@ const Index = () => {
                                                     dangerouslySetInnerHTML={{ __html: Icons.default.edit }}
                                                     onClick={() => handleEditUser(item)}
                                                 ></div>
-                                                <div className="icon-delete"
-                                                    dangerouslySetInnerHTML={{ __html: Icons.default.delete }}
-                                                    onClick={() => handleDeleteUser(item)}
-                                                ></div>
+                                                <Popconfirm
+                                                    title="Are you sure you want to delete?"
+                                                    description=""
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                    onConfirm={() => handleDeleteUser(item)}
+                                                >
+                                                    <div className="icon-default"
+                                                        dangerouslySetInnerHTML={{ __html: Icons.default.delete }}
+                                                    ></div>
+                                                </Popconfirm>
                                             </>
                                         }
                                     </div>
@@ -470,15 +489,37 @@ const Index = () => {
                         <div className="card-bottom-main">
                             <div></div>
                             <div className="card-actions">
-                                <Buttons
+                                {HasNoLimit ?
+                                    <Popconfirm
+                                        title="Usage limitation"
+                                        description="You have exhausted the the usage with your current plan period."
+                                        okText="Upgrade"
+                                        showCancel={false}
+                                        onConfirm={() => navigator('/upgrade')}
+                                    >
+                                        <button
+                                            type={'button'}
+                                            className={`button button-primary elem-width-auto`}
+                                        >
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: Icons.default.plus }}
+                                                className="button-icon"
+                                            ></div>
+                                            <div className="button-label">Add Users</div>
 
-                                    id='save'
-                                    type='primary'
-                                    width='auto'
-                                    label='Add Users'
-                                    icon={Icons.default.plus}
-                                    callback={handleAddUser}
-                                />
+                                        </button>
+                                    </Popconfirm>
+                                    :
+                                    <Buttons
+
+                                        id='save'
+                                        type='primary'
+                                        width='auto'
+                                        label='Add Users'
+                                        icon={Icons.default.plus}
+                                        callback={handleAddUser}
+                                    />
+                                }
                             </div>
                         </div>
                     </div>

@@ -2,8 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 class BlogRequest(BaseModel):
-    industry: str
-    category: str
+    
     description: str
 
     language: Optional[str] = "English"
@@ -20,6 +19,10 @@ class OllamaRequest(BaseModel):
     model: str
     prompt: str
     stram: str
+
+
+class PromptRequest(BaseModel):
+    prompt: str
 
 class OllamaResponse(BaseModel):
     success: bool

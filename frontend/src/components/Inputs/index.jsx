@@ -43,6 +43,7 @@ const Index = ({
 }) => {
   const renderInput = () => {
     if (type == "text") return <TextInput id={id} {...input_props} />
+    if (type == "password") return <TextInput id={id} {...input_props} />
     if (type == "tags") return <TagsInput id={id} {...input_props} />
     if (type == "number") return <NumberInput id={id} {...input_props} />
     if (type == "checkbox") return <CheckboxInput id={id} {...input_props} />

@@ -30,13 +30,8 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
 
 
     const [Language, setLanguage] = useState(LanguagesData[0])
-    const [TitleOptions, setTitleOptions] = useState([
-        "How an AI Writer Boosts BlogSEO for Autoblogging Success",
-        "Automated AI Writing: The Future of BlogSEO and Web Traffic",
-        "Dominating BlogSEO with an AI-Powered Autoblogging Tool",
-        "Revolutionize Autoblogging: AI Writing for Maximum Web Traffic",
-        "AI Writer Secrets to Skyrocket Your BlogSEO and Autoblogging",
-    ])
+    const [TitleOptions, setTitleOptions] = useState([])
+    const [initialOutlineItems, setinitialOutlineItems] = useState([])
 
     const ToneOptions = [
         {
@@ -101,66 +96,16 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
         },
 
     ]
-    const initialOutlineItems = [
-        {
-            id: '1',
-            label: "Understanding the Role of AI Writers in Modern Blogging"
-        },
-        {
-            id: '2',
-            label: "What is Autoblogging and Why It Matters for Content Creators"
-        },
-        {
-            id: '3',
-            label: "The Intersection of AI Writers and SEO: A Powerful Combination"
-        },
-        {
-            id: '4',
-            label: "How AI Enhances Keyword Research for High-Ranking Content"
-        },
-        {
-            id: '5',
-            label: "Optimizing Post Structure and Readability with AI Automation"
-        },
-        {
-            id: '6',
-            label: "Effortless Content Generation: Saving Time and Boosting Productivity"
-        },
-        {
-            id: '7',
-            label: "Utilizing AI to Stay Ahead of Algorithm Updates and Trends"
-        },
-        {
-            id: '8',
-            label: "Ensuring Authenticity and Originality in AI-Generated Content"
-        },
-        {
-            id: '9',
-            label: "AI-Powered Tools for Monitoring Performance and Analytics"
-        },
-        {
-            id: '10',
-            label: "Scaling Your Blog with AI-Driven Content Strategies"
-        },
-        {
-            id: '11',
-            label: "Balancing Automation and Human Touch for Sustained Success"
-        },
-        {
-            id: '12',
-            label: "Future Trends: AI's Continuing Influence on Blogging and SEO"
-        },
-    ]
+
 
     const [Form_Data, setForm_Data] = useState({
         title: TitleOptions[0],
-        outline_items: [...initialOutlineItems],
+        outlines: [...initialOutlineItems],
         tone: ToneOptions[0].value,
         view: ViewOptions[0].value,
         length: LengthOptions[0].value,
         inter_links: false,
     })
-
 
     const handleInputChange = (key, value) => {
 
@@ -172,16 +117,21 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
 
         if (!destination) return;
 
-        const reordered = Array.from(Form_Data.outline_items);
+        const reordered = Array.from(Form_Data.outlines);
         const [moved] = reordered.splice(source.index, 1);
         reordered.splice(destination.index, 0, moved);
 
-        handleInputChange('outline_items', reordered);
+        handleInputChange('outlines', reordered);
     };
 
     const handleGenerate = () => {
 
         let payload = {
+            id: data.id,
+            description: data.description,
+            keywords: data.keywords,
+            language: data.language,
+            brand_name: data.brand_name,
             ...Form_Data
         }
 
@@ -196,11 +146,66 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
             let language = LanguagesData.find(l => l.label == data.language) || LanguagesData[0]
             setLanguage(language)
         }
-        if (data.title) handleInputChange('title', data.title)
-        if (data.tone) handleInputChange('tone', data.title)
-        if (data.view) handleInputChange('view', data.title)
-        if (data._length) handleInputChange('length', data._length)
 
+        if (data.title_options) setTitleOptions(data.title_options)
+        if (data.outlines) setinitialOutlineItems(data.outlines)
+
+        setForm_Data(prev => {
+            const updated = { ...prev };
+            if (data.title) updated['title'] = data.title
+            if (data.outlines) updated['outlines'] = data.outlines
+
+            if (data.tone) updated['tone'] = data.title
+            if (data.view) updated['view'] = data.title
+            if (data._length) updated['length'] = data._length
+
+            return updated;
+        });
+
+    }
+
+
+    const reGenerate = async (key) => {
+
+
+        let payload = {
+            id: data.id,
+            brand_id: data.brand_id,
+            brand_name: data.brand_name,
+            description: data.description,
+            language: data.language,
+            keywords: data.keywords,
+        }
+
+
+        setIsLoading(true)
+
+        let response = {
+            success: false
+        }
+
+        if (key == 'title') response = await articlesHandler.regenerate_title(payload)
+        else if (key == 'outline') response = await articlesHandler.regenerate_outlines(payload)
+
+        setIsLoading(false)
+
+        if (!response.success) {
+            setWarningAlert(true)
+            setWarningAlertType('error')
+            setwarningAlertMessage(response.message)
+
+            return
+        }
+
+        const { title_options, outlines } = response.data
+
+        if (key == 'title') {
+            setTitleOptions(title_options)
+            setForm_Data({ ...Form_Data, 'title': title_options[0] })
+        }
+        else if (key == 'outline') {
+            setForm_Data({ ...Form_Data, 'outlines': outlines })
+        }
     }
 
     useEffect(() => {
@@ -322,6 +327,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                     _style={{
                                         minHeight: '1.8rem'
                                     }}
+                                    callback={() => reGenerate('title')}
                                 />
                             </div>
                         </div>
@@ -356,7 +362,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                         style: {
                                             height: '1.8rem'
                                         },
-                                        value: 20,
+                                        value: Form_Data.outlines.length,
                                     }}
                                 />
                                 <Buttons
@@ -367,6 +373,8 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                     _style={{
                                         minHeight: '1.8rem'
                                     }}
+                                    callback={() => reGenerate('outline')}
+
                                 />
                                 <Buttons
                                     type="outline"
@@ -387,10 +395,10 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                         ref={provided.innerRef}
                                         className="section-items"
                                     >
-                                        {Form_Data.outline_items.map((item, index) => (
+                                        {Form_Data.outlines.map((item, index) => (
                                             <Draggable
-                                                key={item.id}
-                                                draggableId={item.id}
+                                                key={`outline_${index}`}
+                                                draggableId={`outline_${index}`}
                                                 index={index}
                                             >
                                                 {(provided, snapshot) => (
@@ -408,9 +416,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                                             className="section-item-icon"
                                                             dangerouslySetInnerHTML={{ __html: Icons.default.draggable }}
                                                         ></div>
-                                                        <div className="section-item-label">
-                                                            {item.label}
-                                                        </div>
+                                                        <div className="section-item-label">{item}</div>
                                                     </div>
                                                 )}
                                             </Draggable>

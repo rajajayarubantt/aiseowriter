@@ -13,7 +13,7 @@ class BlogAgent {
         const response = await this.apiHandler.request({
             base_url: proxyConfig['blogAgentBaseUrl'],
             method: 'POST',
-            endpoint: "/blog/generate",
+            endpoint: "/blog/generate-article",
             has_token: false,
             params: params,
         })

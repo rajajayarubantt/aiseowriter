@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { useSelector } from 'react-redux'
 import { Modal } from 'antd';
 
 /*Assets*/
@@ -32,6 +32,8 @@ const CreateCampaign = ({ callback = () => { } }) => {
     const navigator = useNavigate()
     const campaignsHandler = new CampaignsHandler()
     const brandHandler = new BrandHandler()
+
+    const store = useSelector(state => state)
 
     const [isLoading, setIsLoading] = useState(false)
     const [warningAlert, setWarningAlert] = useState(false)
@@ -116,13 +118,9 @@ const CreateCampaign = ({ callback = () => { } }) => {
             label: 'Infography'
         },
         {
-            value: 'ai-1:1',
-            label: 'Generate by AI 1:1'
-        },
-        {
-            value: 'ai-16:9',
-            label: 'Generate by AI 16:9'
-        },
+            value: 'ai',
+            label: 'Generate by AI'
+        }
 
     ]
     const PostCountOptions = [
@@ -194,11 +192,12 @@ const CreateCampaign = ({ callback = () => { } }) => {
         },
 
     ]
-    const PlatformsOptions = [...Images.integrations]
+    const PlatformsOptions = [...Images.integrations.filter(i => !i.coming_soon)]
     const [CustomTimeZone, setCustomTimeZone] = useState(false)
     const [ShowMoreOptions, setShowMoreOptions] = useState(false)
     const [DataValid, setDataValid] = useState(false)
 
+    const [MaxLimit, setMaxLimit] = useState(0)
 
     const [CurrentStep, setCurrentStep] = useState(0);
     const StepperItems = [
@@ -211,6 +210,7 @@ const CreateCampaign = ({ callback = () => { } }) => {
         name: '',
         cover_image: 'none',
         brand_id: null,
+        brand_name: null,
         description: null,
         language: "English (US)",
         keywords: [],
@@ -229,6 +229,7 @@ const CreateCampaign = ({ callback = () => { } }) => {
         name: true,
         cover_image: true,
         brand_id: false,
+        brand_name: false,
         description: false,
         language: true,
         keywords: true,
@@ -297,6 +298,7 @@ const CreateCampaign = ({ callback = () => { } }) => {
             return
         }
 
+        payload.post_count = String(payload.post_count > MaxLimit ? MaxLimit : payload.post_count)
         payload.schedule_type = payload.schedule_type == 'schedule' ? '1' : '0'
         payload.platforms = payload.platforms.filter(p => p.selected).map(p => p.value)
         payload.post_custom_time_zones = payload.post_custom_time_zones.map(p => {
@@ -329,7 +331,11 @@ const CreateCampaign = ({ callback = () => { } }) => {
     const handleInputChange = (key, value, sub_idx, sub_key, sub_value) => {
         let formData = { ...Form_Data };
 
-        if (key == 'post_count') {
+        if (key == 'brand_id') {
+            formData[key] = value
+            formData['brand_name'] = sub_idx
+        }
+        else if (key == 'post_count') {
             const targetCount = Math.max(0, Number(value));
             const post_custom_time_zones = [...formData.post_custom_time_zones];
 
@@ -400,6 +406,7 @@ const CreateCampaign = ({ callback = () => { } }) => {
 
     }, [])
 
+
     const renderKeyWorksSection = () => {
         return (
             <InputWrapper>
@@ -448,7 +455,9 @@ const CreateCampaign = ({ callback = () => { } }) => {
                     width='max'
                     input_props={{
                         value: Form_Data.brand_id,
-                        onChange: (val) => handleInputChange('brand_id', val),
+                        onChange: (val, opt) => {
+                            handleInputChange('brand_id', val, opt.label)
+                        },
                         options: BrandOptions,
                         has_option_icon: true,
                         placeholder: 'Select your brand',
@@ -593,18 +602,19 @@ const CreateCampaign = ({ callback = () => { } }) => {
                 }
                 <Inputs
                     id="add-campaign-post_count"
-                    type="select"
+                    type="number"
                     width='max'
                     input_props={{
                         value: Form_Data.post_count,
                         onChange: (val) => handleInputChange('post_count', val),
-                        options: PostCountOptions,
                         has_option_icon: true,
+                        max: MaxLimit,
                         placeholder: 'Select your brand',
                         label: `Number of articles to generate ${Form_Data.post_daily ? '/day' : ''}`,
                         invalid: InvalidData.post_count,
                     }}
                 />
+
                 {Form_Data.schedule_type == 'schedule' &&
                     <>
                         {!CustomTimeZone &&
@@ -709,6 +719,14 @@ const CreateCampaign = ({ callback = () => { } }) => {
             </InputWrapper>
         )
     }
+
+    useEffect(() => {
+
+        if (store.user.subscription.limitations) {
+            setMaxLimit(store.user.subscription.limitations.articles)
+        }
+
+    }, [store.user.subscription])
 
     return (
         <>

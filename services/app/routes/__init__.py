@@ -1,8 +1,10 @@
 from fastapi import APIRouter
 from app.routes.v1.blog import router as blog_router
+from app.routes.v1.platforms import router as platforms_router
 
 router = APIRouter()
 
 base_prefix = "/api/v1"
 
 router.include_router(blog_router, prefix=f"{base_prefix}/blog", tags=["Blog"])
+router.include_router(platforms_router, prefix=f"{base_prefix}/platform", tags=["Blog"])

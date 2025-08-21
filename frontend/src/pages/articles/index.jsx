@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
-import { Dropdown } from 'antd';
+import { useSelector } from 'react-redux'
 
 /*Assets*/
 import Images from "../../assets/Images";
 import Icons from "../../assets/Icons";
 
 /*Components*/
-
 import ActionDropdown from "../../components/ActionDropdown";
 import Loaders from '../../components/Loaders'
 import Toasters from '../../components/Toasters'
@@ -35,6 +33,7 @@ const Index = () => {
     const PAGE_TITLE = "Articles"
     const PAGE_DESC = "Browse through all articles that you've generated so far."
 
+    const store = useSelector(state => state)
 
     const [isLoading, setIsLoading] = useState(false)
     const [IsTableLoading, setIsTableLoading] = useState(false)
@@ -81,6 +80,7 @@ const Index = () => {
 
     const [Articles, setArticles] = useState([])
 
+    const [HasNoLimit, setHasNoLimit] = useState(true)
 
     const TableDopdownActions = [
         {
@@ -135,9 +135,9 @@ const Index = () => {
         },
         {
             title: 'Word count',
-            dataIndex: 'word_count',
-            key: 'word_count',
-            render: (_) => '2000+'
+            dataIndex: 'words',
+            key: 'words',
+            render: (text) => `${text}+`
         },
         {
             title: 'Last Updated on',
@@ -179,6 +179,7 @@ const Index = () => {
 
 
     const handleAddNew = () => {
+
         navigator('add')
     }
 
@@ -278,7 +279,7 @@ const Index = () => {
             d.title = d.title || 'N/A'
             d.status = status.status
             d.status_key = status.status_key
-            d.keywords = JSON.parse(d.keywords)
+            d.words = d.words || Utils.countWords(d.content)
             d.lastupdated = Utils.formateDateLabel({ ms: d.updated_at })
             return d
         })
@@ -290,6 +291,12 @@ const Index = () => {
     useEffect(() => {
         getTableData()
     }, [])
+
+    useEffect(() => {
+
+        if (store.user.subscription.limitations) setHasNoLimit(store.user.subscription.limitations.articles <= 0)
+
+    }, [store.user.subscription])
 
     return (
         <>
@@ -325,6 +332,7 @@ const Index = () => {
                             icon: Icons.default.magic_brush,
                             width: "auto",
                             label: "Generate Article",
+                            has_no_limit: HasNoLimit,
                             callback: handleAddNew,
                         }
                     ]}

@@ -1,4 +1,9 @@
 const { v4: uuidv4 } = require("uuid");
+
+const { saveAs } = require("file-saver");
+const { marked } = require("marked");
+const htmlDocx = require("html-docx-js/dist/html-docx");
+
 let utils = {
   numberOnly: (value) => value.replace(/[^0-9.]/g, ""),
   validateEmailFormat(val) {
@@ -96,6 +101,29 @@ let utils = {
     else if (value >= 1000) return (value / 1000).toFixed(2) + "K";
 
     return value.toString();
+  },
+
+  getSlugFromUrl(url) {
+    if (!url) return "";
+
+    // Remove protocol and www
+    url = url.replace(/^(https?:\/\/)?(www\.)?/, "");
+
+    // Remove query parameters and fragments
+    url = url.split(/[?#]/)[0];
+
+    // Get the last part of the URL path
+    const parts = url.split("/");
+    const lastPart = parts.pop() || parts.pop(); // Handle potential trailing slash
+
+    // Remove file extension
+    return lastPart.replace(/\.[^/.]+$/, "");
+  },
+  countWords(text) {
+    // Trim the text to remove leading/trailing spaces and split by one or more whitespace characters
+    const words = text.trim().split(/\s+/);
+    // Handle case when text is empty after trimming
+    return text.trim() === '' ? 0 : words.length;
   },
 
   getDurationFromDates(start, end, format = "D:H:M") {
@@ -856,5 +884,35 @@ let utils = {
         : "")
     );
   },
+
+  exportAsWord: ({ filename, content }) => {
+    try {
+      const htmlContent = marked.parse(content);
+
+      const fullHTML = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8" />
+            <title>Export</title>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; }
+              h1, h2, h3 { font-weight: bold; }
+              pre { background: #f4f4f4; padding: 10px; border-radius: 4px; }
+              code { font-family: monospace; }
+            </style>
+          </head>
+          <body>${htmlContent}</body>
+        </html>
+      `;
+
+      const docxBlob = htmlDocx.asBlob(fullHTML);
+      saveAs(docxBlob, filename);
+    }
+    catch (error) {
+      console.log(error);
+
+    }
+  }
 };
 export default utils;

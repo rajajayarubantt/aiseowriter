@@ -2,14 +2,14 @@ import requests
 import re
 from app.config import settings
 
-from app.models.blog_model import OllamaRequest, OllamaResponse
+from app.models.blog_model import OllamaRequest
 
 class OllamaService:
     BASE_URL = settings.OLLAMA_API_BASE_URL
 
     @staticmethod
     def extract_thinking(result):
-        match = re.search(r"<think>(.*?)</think>", result, flags=re.DOTALL)
+        match = re.search(r"<think[^>]*>(.*?)</think>", result, flags=re.DOTALL)
         return match.group(1).strip() if match else ""
     
     def remove_thinking(result):
@@ -30,8 +30,6 @@ class OllamaService:
 
                 # thinking = OllamaService.extract_thinking(result)
                 result = OllamaService.remove_thinking(result)
-
-                print(result, 'result \n')
 
                 return {
                     "success": True, 

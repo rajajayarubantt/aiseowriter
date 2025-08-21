@@ -98,7 +98,7 @@ const SmarkTopCards = ({ items = [], callback = () => { }, loading = false }) =>
                                     <div
                                         className="card-icon"
                                         style={{ fill: STYLES[item.type].color }}
-                                        dangerouslySetInnerHTML={{ __html: item.icon || Icons.general.invoice_total }}
+                                        dangerouslySetInnerHTML={{ __html: item.icon }}
                                     ></div>
                                 </>
                             }

@@ -1,25 +1,25 @@
 require('dotenv')
 
+const { ObjectId } = require('mongodb');
 const config = require('config')
 const mysqlTables = config.get('mysqlTables')
-const { runPreparedQuery, runQuery } = require('../../helpers/mysqlQuery')
-const FieldsUpdate = require("../../helpers/FieldsUpdate");
-
-const PayloadValidator = require('../../helpers/PayloadValidator')
-const payloadValidator = new PayloadValidator()
+const Utils = require('../../helpers/utils')
 
 const ResponseHandler = require('../../helpers/ResponseHandler')
 const responseHandler = new ResponseHandler()
 
+const PayloadValidator = require('../../helpers/PayloadValidator')
+const payloadValidator = new PayloadValidator()
+
 
 class Campaigns {
-
 
     async get_campaigns(req, res) {
 
         try {
 
-            await payloadValidator.Validate({ name: 'get_campaigns', req, res, payload: req.query })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'get_campaigns', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -29,49 +29,84 @@ class Campaigns {
                 page, limit
             } = req.query
 
-            let filter = {
-                org_id
+            const get_query = {
+                org_id: org_id
             }
 
-            if (id) filter.id = id
+            if (id) get_query['_id'] = new ObjectId(id)
 
-            const DEFAULT_COLUMNS = "id,org_id,name,description,keywords,brand_id,language,status,post_count,schedule_type,post_daily"
-            const COLUMNS = `${columns || DEFAULT_COLUMNS},created_at,created_by_name,updated_at,updated_by_name`
+            let options = {
+                projection: {}
+            }
 
-            const get_query = FieldsUpdate.prepareQueryGeneratore({
-                METHOD: 'SELECT',
-                SELECT: COLUMNS,
-                TABEL: mysqlTables.CAMPAIGNS,
-                VALID: filter,
-                PAGE: parseInt(page),
-                LIMIT: parseInt(limit)
-            })
+            if (page && limit) {
+                options['page'] = page
+                options['limit'] = limit
+            }
 
-            let response = await runPreparedQuery(get_query.query, get_query.value)
+            if (columns && columns.length && columns != "*") {
 
-            response = response.map(r => {
+                String(columns).split(',')?.forEach(p => {
 
-                r.articles = [
-                    {
-                        id: 1,
-                        cover_image: 'https://images.unsplash.com/photo-1620287341260-a9ecadfe7a17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NjcwNzZ8MHwxfHNlYXJjaHwxfHxibG9nZ3xlbnwwfHx8fDE3NDg0ODIyMDN8MA&ixlib=rb-4.1.0&q=80&w=1080',
-                        title: 'How an AI Writer Boosts BlogSEO for Autoblogging Success'
+                    options.projection[p] = 1
+                })
+
+            }
+
+            let response = await req.mongoDB.find(mysqlTables.MONGO_CAMPAIGNS, get_query, options)
+            let summary_response = await req.mongoDB.aggregate(mysqlTables.MONGO_CAMPAIGNS, [
+                {
+                    '$group': {
+                        _id: "$status",
+                        count: { '$sum': 1 }
                     }
-                ]
-                return r
+                }
+            ])
+
+            let data = response.items || []
+
+            const get_articles_query = {
+                org_id: org_id,
+                schedule_id: { "$in": data.map(d => String(d._id)) }
+            }
+
+            let get_articles_options = {
+                projection: {
+                    title: 1,
+                    schedule_id: 1,
+                    cover_image: 1,
+                    url: 1
+                }
+            }
+
+
+            let articles_response = await req.mongoDB.find(mysqlTables.MONGO_BLOGS, get_articles_query, get_articles_options)
+
+            articles_response = articles_response.items || []
+
+            articles_response = articles_response.map(a => {
+
+                a.id = a._id
+
+                return a
             })
 
-            const get_summary_query = `SELECT status, COUNT(*) AS count FROM ${mysqlTables.CAMPAIGNS} GROUP BY status;`
-            const summary_response = await runQuery(get_summary_query)
+            data = data.map(d => {
 
-            const summary_data = Object.fromEntries(summary_response.map(({ status, count }) => [status, count]))
+                d.id = String(d._id)
+                d.articles = articles_response.filter(a => a.schedule_id == d.id)
 
+                return d
+            })
+
+
+            const summary_data = Object.fromEntries(summary_response.map(({ _id, count }) => [_id, count]))
 
             return responseHandler.successRequest({
                 name: 'get_campaigns',
                 req, res,
                 message: "Campaigns retrived successfully!",
-                data: response,
+                data: data,
                 summary_data
             })
         }
@@ -81,10 +116,12 @@ class Campaigns {
         }
 
     }
+
     async create_campaign(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'create_campaign', req, res, payload: req.body })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'create_campaign', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -94,6 +131,7 @@ class Campaigns {
                 cover_image,
                 language,
                 brand_id,
+                brand_name,
                 tone,
                 view,
                 length,
@@ -105,17 +143,16 @@ class Campaigns {
                 platforms,
                 post_custom_time_zones
 
-
-
             } = req.body
 
-            const query_data = {
+            const insert_data = {
                 org_id,
                 name,
-                keywords: JSON.stringify(keywords, "[]"),
+                keywords,
                 cover_image,
                 language,
                 brand_id,
+                brand_name,
                 description: description || "",
                 tone,
                 view,
@@ -125,23 +162,18 @@ class Campaigns {
                 post_daily: post_daily ? 1 : 0,
                 inter_links: inter_links ? 1 : 0,
                 time_zone,
-                platforms: JSON.stringify(platforms, "[]"),
-                post_custom_time_zones: JSON.stringify(post_custom_time_zones, "[]"),
+                platforms,
+                post_custom_time_zones,
+                status: 0,
 
-
+                created_at: Utils.getCurrentTimeStamp(),
                 created_by_id: user_id,
                 created_by_name: user_name || user_email,
             }
 
-            const insert_query = FieldsUpdate.prepareQueryGeneratore({
-                METHOD: 'INSERT',
-                TABEL: mysqlTables.CAMPAIGNS,
-                DATA: query_data
-            })
+            let response = await req.mongoDB.insertOne(mysqlTables.MONGO_CAMPAIGNS, insert_data)
 
-            let response = await runPreparedQuery(insert_query.query, insert_query.value)
-
-            if (!response.affectedRows) return responseHandler.failedRequest({
+            if (!response.acknowledged || !response.insertedId) return responseHandler.failedRequest({
                 name: 'create_campaign',
                 req, res,
                 message: "Failed to create campaign, Please try again!"
@@ -153,7 +185,7 @@ class Campaigns {
                 req, res,
                 message: "Campaign created successfully!",
                 data: {
-                    id: response.insertId
+                    id: response.insertedId
                 }
             })
         }
@@ -163,6 +195,7 @@ class Campaigns {
         }
 
     }
+
 
 }
 

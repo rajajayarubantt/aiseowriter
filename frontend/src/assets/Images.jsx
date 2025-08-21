@@ -13,17 +13,17 @@ import Integ_Shopify from './images/integrations/shopify.svg'
 import Integ_Twitter from './images/integrations/twitter.png'
 import Integ_Webflow from './images/integrations/webflow.webp'
 import Integ_Wordpress from './images/integrations/wordpress.webp'
+import Integ_WordpressOrg from './images/integrations/wordpress.org.png'
 import Integ_Zapier from './images/integrations/zapier.webp'
 
 
 
-
-
-
+import Sitemap from './images/sitemap-links.webp'
 import Loading from './images/loading.gif'
 
 
 const Images = {
+    Sitemap,
     Loading,
     Logo,
     Login_Banner,
@@ -36,6 +36,7 @@ const Images = {
         Shopify: Integ_Shopify,
         Webflow: Integ_Webflow,
         Wordpress: Integ_Wordpress,
+        Wordpress_org: Integ_WordpressOrg,
         Ghost: Integ_Ghost,
         Blogger: Integ_Blogger,
         Notion: Integ_Notion,
@@ -48,35 +49,40 @@ const Images = {
             img: Integ_Linkedin
         },
         {
+            label: 'Ghost',
+            value: 'ghost',
+            selected: false,
+            img: Integ_Ghost
+        },
+        {
             label: 'Zapier',
             value: 'zapier',
             selected: false,
+            coming_soon: true,
             img: Integ_Zapier
         },
         {
             label: 'X (Twitter)',
             value: 'twitter',
             selected: true,
+            coming_soon: true,
             img: Integ_Twitter
         },
         {
             label: 'Instagram',
             value: 'instagram',
             selected: false,
+            coming_soon: true,
             img: Integ_Insta
         },
         {
             label: 'Shopify',
             value: 'shopify',
             selected: false,
+            coming_soon: true,
             img: Integ_Shopify
         },
-        {
-            label: 'Webflow',
-            value: 'webflow',
-            selected: false,
-            img: Integ_Webflow
-        },
+
         {
             label: 'Wordpress',
             value: 'wordpress',
@@ -84,16 +90,24 @@ const Images = {
             img: Integ_Wordpress
         },
         {
-            label: 'Ghost',
-            value: 'ghost',
+            label: 'Wordpress.Org',
+            value: 'wordpress.org',
             selected: false,
-            img: Integ_Ghost
+            img: Integ_WordpressOrg
         },
+
         {
             label: 'Blogger',
             value: 'blogger',
             selected: false,
+            coming_soon: true,
             img: Integ_Blogger
+        },
+        {
+            label: 'Webflow',
+            value: 'webflow',
+            selected: false,
+            img: Integ_Webflow
         },
         {
             label: 'Notion',

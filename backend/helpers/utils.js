@@ -1,6 +1,13 @@
 const { v4: uuidv4 } = require('uuid')
 const fs = require('fs')
 const XLSX = require('xlsx');
+const axios = require('axios');
+const jwt = require('jsonwebtoken')
+const xml2js = require('xml2js');
+const cheerio = require('cheerio');
+
+const parser = new xml2js.Parser();
+
 
 let ratio;
 let utils = {
@@ -35,6 +42,212 @@ let utils = {
         let format = file.mimetype.split('/')[1]
 
         return format
+    },
+
+    validateWordpressInputs({ site_url, username, password }) {
+
+        if (!site_url || typeof site_url !== 'string') return false
+        else {
+            try {
+                new URL(site_url);
+            } catch (e) {
+
+                return false
+            }
+        }
+
+        if (!username || typeof username !== 'string' || username.trim().length === 0) return false
+        if (!password || typeof password !== 'string' || password.trim().length === 0) return false
+
+        return true
+    },
+    validateGhostInputs({ api_url, api_key }) {
+
+        if (!api_url || typeof api_url !== 'string') return false
+        else {
+            try {
+                new URL(api_url);
+            } catch (e) {
+
+                return false
+            }
+        }
+
+        if (!api_key || typeof api_key !== 'string' || api_key.trim().length === 0) return false
+
+        return true
+    },
+    normalizeUrl(url) {
+        let normalizedUrl = url.trim();
+
+        // Add protocol if missing
+        if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
+            normalizedUrl = 'https://' + normalizedUrl;
+        }
+
+        // Remove trailing slash
+        normalizedUrl = normalizedUrl.replace(/\/$/, '');
+
+        return normalizedUrl;
+    },
+    generateGhostAdminToken(api_key) {
+        const [id, secret] = api_key.split(':');
+
+        if (!id || !secret) return false
+
+        const token = jwt.sign({}, Buffer.from(secret, 'hex'), {
+            keyid: id,
+            algorithm: 'HS256',
+            expiresIn: '5m',
+            audience: '/admin/'
+        });
+
+        return token;
+    },
+    async checkWordpressSiteReachability(site_url) {
+        const response = await axios.get(site_url, {
+            timeout: this.timeout,
+            headers: {
+                'User-Agent': 'WordPress-Connection-Validator/1.0'
+            },
+            maxRedirects: 5
+        });
+
+        return {
+            step: 'reachability',
+            success: response.status === 200,
+            statusCode: response.status,
+            message: 'Site is reachable'
+        };
+    },
+    async checkWordPressAPI(site_url) {
+        const apiUrl = `${site_url}/wp-json/wp/v2`;
+
+        let response = await axios.get(apiUrl, {
+            timeout: this.timeout,
+            headers: {
+                'User-Agent': 'WordPress-Connection-Validator/1.0'
+            }
+        });
+
+
+        // Check if response contains WordPress API structure
+        const isWordPressAPI = response.data &&
+            (response.data.namespace || response.data.routes || Array.isArray(response.data));
+
+        return {
+            step: 'wordpress_api',
+            success: response.status === 200 && isWordPressAPI,
+            statusCode: response.status,
+            message: isWordPressAPI ? 'WordPress REST API is available' : 'Not a WordPress site or API disabled',
+            apiVersion: response.headers['x-wp-api'] || 'unknown'
+        };
+    },
+    getWordpressResultData(result) {
+        if (result.status === 'fulfilled') {
+            return result.value;
+        } else {
+            return {
+                success: false,
+                error: result.reason.message,
+                errorCode: result.reason.code,
+                step: 'unknown'
+            };
+        }
+    },
+    getWordpressFailureMessage(tests) {
+        if (!tests.reachability.success) {
+            return 'Cannot reach the URL. Please check the site URL.';
+        }
+
+        if (!tests.wordpressAPI.success) {
+            return 'WordPress REST API is not available or site is not WordPress.';
+        }
+
+        if (!tests.authentication.success) {
+            return 'Authentication failed. Please check your username and password.';
+        }
+
+        return 'Unknown connection error occurred.';
+    },
+
+    async authenticateWordpressUser(site_url, username, password) {
+
+        try {
+            const authUrl = `${site_url}/wp-json/wp/v2/users/me`;
+
+            // Create Basic Auth header
+            const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
+
+            const response = await axios.get(authUrl, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${token}`
+                },
+
+            });
+
+            const site_response = await utils.getWordpressSites(site_url, token)
+
+            return {
+                step: 'authentication',
+                success: response.status === 200,
+                statusCode: response.status,
+                message: 'Authentication successful',
+                userInfo: {
+                    id: response.data.id,
+                    name: response.data.name,
+                    username: response.data.slug,
+                    email: response.data.email,
+                    site_details: site_response.data || {}
+                }
+            };
+        } catch (error) {
+            return {
+                step: 'authentication',
+                success: false,
+                statusCode: error?.response?.status || 500,
+                message: error?.response?.data?.message || 'Authentication failed',
+                error: error?.response?.data || error.message
+            };
+        }
+    },
+    async getWordpressSites(site_url, token) {
+
+        try {
+
+            const authUrl = `${site_url}/wp-json`;
+
+            const response = await axios.get(authUrl, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${token}`
+                },
+
+            });
+
+            return {
+                success: response.status === 200,
+                statusCode: response.status,
+                message: 'Site details successful',
+                data: {
+                    name: response.data?.name,
+                    description: response.data?.description,
+                    home: response.data?.home,
+                    url: response.data?.url,
+                    site_logo: response.data?.site_logo || "",
+                    site_icon: response.data?.site_icon || "",
+                    site_icon_url: response.data?.site_icon_url || "",
+                }
+            };
+        } catch (error) {
+            return {
+                success: false,
+                statusCode: error?.response?.status || 500,
+                message: error?.response?.data?.message || 'Site details failed',
+                error: error?.response?.data || error.message
+            };
+        }
     },
 
     getFileExtension(filename) {
@@ -682,6 +895,67 @@ let utils = {
             return true
         } else {
             return false
+        }
+    },
+
+    getSitemapUrls: async (url) => {
+        const urls = [];
+
+        try {
+            const response = await axios.get(url);
+            const parsed = await parser.parseStringPromise(response.data);
+
+            // Check if it is a sitemap index
+            if (parsed.sitemapindex && parsed.sitemapindex.sitemap) {
+                const sitemapEntries = parsed.sitemapindex.sitemap;
+                for (const sitemap of sitemapEntries) {
+                    const loc = sitemap.loc[0];
+                    const nestedUrls = await getAllSitemapUrls(loc.trim().replace(/\s+/g, ''));
+                    urls.push(...nestedUrls);
+                }
+            }
+
+            // Check if it is a regular sitemap with <urlset>
+            if (parsed.urlset && parsed.urlset.url) {
+                const urlEntries = parsed.urlset.url;
+                for (const url of urlEntries) {
+                    if (url.loc && url.loc[0]) {
+                        const rawUrl = url.loc[0];
+                        const cleanUrl = rawUrl.trim().replace(/\s+/g, '');
+                        urls.push(cleanUrl);
+                    }
+                }
+            }
+
+            return urls
+
+        } catch (error) {
+            console.error(`Error fetching/parsing ${url}:`, error.message);
+            return [];
+        }
+
+    },
+    async getSiteMetaFromSitemap(sitemapUrl) {
+        const siteUrl = sitemapUrl.replace(/\/sitemap\.xml$/, '');
+
+        try {
+            const response = await axios.get(siteUrl);
+            const $ = cheerio.load(response.data);
+
+            const title = $('head title').text().trim();
+
+            let favicon = $('link[rel="icon"]').attr('href') || $('link[rel="shortcut icon"]').attr('href');
+
+            if (favicon && !favicon.startsWith('http')) {
+                favicon = new URL(favicon, siteUrl).href;
+            }
+
+            const description = $('meta[name="description"]').attr('content')?.trim() || '';
+
+            return { title, favicon, description };
+        } catch (error) {
+            console.error(`Error fetching site metadata from ${siteUrl}:`, error.message);
+            return { title: '', favicon: '', description: '' };
         }
     },
 

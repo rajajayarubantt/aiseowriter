@@ -1,3 +1,6 @@
+const { ObjectId } = require('mongodb');
+const config = require('config')
+const mysqlTables = config.get('mysqlTables')
 
 const PayloadValidator = require('../../helpers/PayloadValidator')
 const payloadValidator = new PayloadValidator()
@@ -12,20 +15,39 @@ class PublicBlogs {
 
         try {
 
-            await payloadValidator.Validate({ name: 'get_public_blogs_lists', req, res, payload: req.query })
+            const isPayloadInValid = await payloadValidator.Validate({ name: 'get_public_blogs_lists', req, res, payload: req.query })
 
-            let { id, slug, search, category, page, limit } = req.query
+            if (isPayloadInValid) return isPayloadInValid
 
-            page = page || 1
-            limit = limit || 10
+            let { id, slug, search, category, page, limit, projection } = req.query
+            console.log(req.query, 'req.query');
+
 
             const get_query = {}
 
-            if (id) get_query['_id'] = id
+            if (id) get_query['_id'] = new ObjectId(id)
             if (slug) get_query['url'] = slug
             if (category) get_query['category'] = { $regex: category, $options: 'i' }
 
-            let response = await req.mongoDB.find("public_blogs", get_query, { page, limit })
+            let options = {
+                projection: {}
+            }
+
+            if (page && limit) {
+                options['page'] = page
+                options['limit'] = limit
+            }
+
+            if (projection && projection.length) {
+
+                String(projection).split(',')?.forEach(p => {
+
+                    options.projection[p] = 1
+                })
+
+            }
+
+            let response = await req.mongoDB.find(mysqlTables.PUBLIC_BLOGS, get_query, options)
 
             return responseHandler.successRequest({
                 name: 'get_public_blogs_lists',

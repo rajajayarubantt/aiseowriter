@@ -1,0 +1,206 @@
+:root {
+    --pilot-head-height: 60px;
+    --pilot-card-width: 300px;
+}
+
+.pilot-container-main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px;
+}
+
+.pilot-container-main .pilot-header {
+    width: 100%;
+    height: var(--pilot-head-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pilot-container-main .pilot-header .header-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.pilot-container-main .pilot-header .header-details .details-title {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-lg);
+    color: var(--font-dark-color);
+
+    font-weight: var(--font-weight-xl);
+}
+
+.pilot-container-main .pilot-header .header-details .details-desc {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-sm);
+    color: var(--font-dark-color);
+
+    font-weight: var(--font-weight-sm);
+}
+
+.pilot-container-main .pilot-header .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+
+.pilot-container-main .pilot-card-main {
+    width: 100%;
+    height: calc(100% - (var(--pilot-head-height) + 20px));
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pilot-container-main .pilot-card-main .card-items {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pilot-container-main .pilot-card-main .card-item {
+    width: 100%;
+    max-width: var(--pilot-card-width);
+    height: 110px;
+
+    padding: 8px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+
+    border: 1.5px solid var(--border-color-100);
+    border-radius: 8px;
+    background: var(--bg-color);
+
+
+    cursor: pointer;
+
+    transition: all .25s;
+}
+
+.pilot-container-main .pilot-card-main .card-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-lg);
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-top-main {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-details {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-details .details-id {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-lg);
+
+    background: var(--transparent-success-color);
+    color: var(--success-color);
+
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-details .details-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-md);
+
+    color: var(--font-dark-color);
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+
+.pilot-container-main .pilot-card-main .card-item .card-bottom-main {
+    width: 100%;
+    height: max-content;
+    padding-top: 8px;
+
+    border-top: .1px solid var(--border-color-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-duration {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-size-xs);
+
+    background: var(--bg-gray-color);
+    color: var(--font-gray-color);
+
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.pilot-container-main .pilot-card-main .card-item .card-count {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-size-md);
+
+
+    color: var(--warning-color);
+    background: var(--transparent-warning-color);
+
+    padding: 4px 8px;
+    border-radius: 100px;
+}
+
+
+@media only screen and (max-width: 1220px) {
+    :root {
+        --pilot-card-width: calc(33.33% - 11px);
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    :root {
+        --pilot-card-width: calc(50% - 4px);
+    }
+
+    .pilot-container-main .pilot-card-main .card-items {
+        gap: 8px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    :root {
+        --pilot-card-width: 100%;
+        --pilot-head-height: 100px;
+    }
+
+    .pilot-container-main .pilot-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+
+}

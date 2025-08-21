@@ -25,8 +25,23 @@ class Settings(BaseSettings):
     MONGODB_URI: str = os.getenv("MONGODB_URI")
     MONGODB_DB: str = os.getenv("MONGODB_DB")
 
+
+    AWS_ACCESS_KEY: str = os.getenv("AWS_ACCESS_KEY")
+    AWS_SECRET_ACCESS_KEY: str = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_REGION: str = os.getenv("AWS_REGION")
+    AWS_BUCKET: str = os.getenv("AWS_BUCKET")
+
+    # Image Generation
+    UNSPLASH_CLIENT_ID: str = os.getenv("UNSPLASH_CLIENT_ID")
+
     # Ollama API settings
     OLLAMA_API_BASE_URL: str = os.getenv("OLLAMA_API_BASE_URL")
+    
+    # Github API settings
+    GITHUB_API_BASE_URL: str = os.getenv("GITHUB_API_BASE_URL")
+    GITHUB_API_TOKEN: str = os.getenv("GITHUB_API_TOKEN")
+
+    GOOGLE_GEMINI_APIKEY: str = os.getenv("GOOGLE_GEMINI_APIKEY")
 
     # Linkedin Ap settings
     LINKEDIN_API_BASE_URL: str = os.getenv("LINKEDIN_API_BASE_URL")

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 import { Modal } from 'antd';
 
@@ -30,6 +31,8 @@ const CreateArticle = ({ callback = () => { } }) => {
     const articlesHandler = new ArticlesHandler()
     const brandHandler = new BrandHandler()
 
+    const store = useSelector(state => state)
+
     const [isLoading, setIsLoading] = useState(false)
     const [warningAlert, setWarningAlert] = useState(false)
     const [warningAlertType, setWarningAlertType] = useState('error')
@@ -39,6 +42,7 @@ const CreateArticle = ({ callback = () => { } }) => {
     const [Form_Data, setForm_Data] = useState({
         cover_image: 'none',
         brand_id: null,
+        brand_name: null,
         description: null,
         language: "English (US)",
         keywords: [],
@@ -47,6 +51,7 @@ const CreateArticle = ({ callback = () => { } }) => {
     const RequiredData = {
         cover_image: true,
         brand_id: false,
+        brand_name: false,
         description: false,
         language: true,
         keywords: true,
@@ -54,6 +59,7 @@ const CreateArticle = ({ callback = () => { } }) => {
     const [InvalidData, setInvalidData] = useState({
         cover_image: false,
         brand_id: false,
+        brand_name: false,
         description: false,
         language: false,
         keywords: false,
@@ -75,13 +81,9 @@ const CreateArticle = ({ callback = () => { } }) => {
             label: 'Infography'
         },
         {
-            value: 'ai-1:1',
-            label: 'Generate by AI 1:1'
-        },
-        {
-            value: 'ai-16:9',
-            label: 'Generate by AI 16:9'
-        },
+            value: 'ai',
+            label: 'Generate by AI'
+        }
 
     ]
 
@@ -155,11 +157,18 @@ const CreateArticle = ({ callback = () => { } }) => {
 
         return navigator(`/article/${id}`)
     }
+    const handleInputChange = (key, value, opt) => {
+        setForm_Data(prev => {
+            const updated = { ...prev };
+            updated[key] = value;
 
-    const handleInputChange = (key, value) => {
+            if (key == 'brand_id' && opt?.label) {
+                updated['brand_name'] = opt.label;
+            }
 
-        setForm_Data({ ...Form_Data, [key]: value })
-    }
+            return updated;
+        });
+    };
 
     const getBrands = async () => {
 
@@ -210,6 +219,14 @@ const CreateArticle = ({ callback = () => { } }) => {
         if (!Object.keys(invalidfields).length) setDataValid(true)
 
     }, [Form_Data])
+
+    useEffect(() => {
+
+        if (store.user.subscription.limitations && store.user.subscription.limitations.articles <= 0) {
+            return navigator(-1)
+        }
+
+    }, [store.user.subscription])
 
 
     return (
@@ -301,7 +318,7 @@ const CreateArticle = ({ callback = () => { } }) => {
                         width='max'
                         input_props={{
                             value: Form_Data.brand_id,
-                            onChange: (val) => handleInputChange('brand_id', val),
+                            onChange: (val, opt) => handleInputChange('brand_id', val, opt),
                             options: BrandOptions,
                             has_option_icon: true,
                             placeholder: 'Select your brand',

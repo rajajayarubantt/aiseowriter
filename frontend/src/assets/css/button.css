@@ -50,10 +50,6 @@
   background: var(--hover-pri_btn-color);
 }
 
-.button-primary .button-icon {
-  width: 14px;
-  height: 14px;
-}
 
 .button-primary .button-icon svg,
 .button-primary .button-icon svg path {

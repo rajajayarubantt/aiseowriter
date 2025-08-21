@@ -20,7 +20,8 @@ class Brands {
 
         try {
 
-            await payloadValidator.Validate({ name: 'get_brands', req, res, payload: req.query })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'get_brands', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -80,7 +81,8 @@ class Brands {
                     return responseHandler.serverError({ name: 'create_brand', req, res })
                 }
 
-                await payloadValidator.Validate({ name: 'create_brand', req, res, payload: req.body })
+                const isPayloadInvalid = await payloadValidator.Validate({ name: 'create_brand', req, res, payload: req.body })
+                if (isPayloadInvalid) return isPayloadInvalid
 
                 const logo = req.files['logo'] ? Utils.base64_encode(req.files['logo'][0].path) : null;
 
@@ -151,7 +153,9 @@ class Brands {
 
                 const logo = req.files['logo'] ? Utils.base64_encode(req.files['logo'][0].path) : null;
 
-                await payloadValidator.Validate({ name: 'update_brand', req, res, payload: req.body })
+                const isPayloadInvalid = await payloadValidator.Validate({ name: 'update_brand', req, res, payload: req.body })
+                if (isPayloadInvalid) return isPayloadInvalid
+
 
                 const {
                     id,
@@ -210,7 +214,8 @@ class Brands {
     async delete_brand(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'delete_brand', req, res, payload: req.body })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'delete_brand', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const { id } = req.body

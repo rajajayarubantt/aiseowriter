@@ -21,8 +21,6 @@ const Index = ({ menus, userdetails, credit_limit = 0, logout_callback = () => {
 
   const [SelectedNavItem, setSelectedNavItem] = useState(selectSection || "#");
 
-  const [BalanceCredit, setBalanceCredit] = useState(credit_limit || 0);
-
   const [EnableMobileView, setEnableMobileView] = useState(false);
 
   const handleNavItemClick = (item) => {
@@ -45,7 +43,10 @@ const Index = ({ menus, userdetails, credit_limit = 0, logout_callback = () => {
 
   useEffect(() => {
 
-    if (menus) setNavMenus(menus)
+    if (menus) {
+      setNavMenus(menus)
+      handleNavItemClick(menus.top[0])
+    }
     if (userdetails) {
       const { profile_url, name, email } = userdetails
       setUserName(name || "")
@@ -117,8 +118,8 @@ const Index = ({ menus, userdetails, credit_limit = 0, logout_callback = () => {
           ))}
         </div>
         <div className="sidebar-creditlimit">
-          <div className="creditlimit-value">{BalanceCredit}</div>
-          <div className="creditlimit-label">Credits left</div>
+          <div className="creditlimit-value">{credit_limit}</div>
+          <div className="creditlimit-label">Blog Credits left</div>
         </div>
         <div className="sidebar-profile-main">
           <img className="profile-img" src={UserImage} alt="" />

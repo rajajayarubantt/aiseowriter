@@ -40,8 +40,10 @@ const Login = ({ type = 'login' }) => {
   const handleGoogleLogin = () => {
     const GOOGLE_OAUTH_CLIENT_ID =
       "240459934728-jsct47v74s7k18c19nan792kracma9cq.apps.googleusercontent.com";
+    const GOOGLE_OAUTH_REDIRECT_URI = "http://localhost:5000/api/v1/auth/verifygoogleauth";
+
     window.open(
-      `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_OAUTH_CLIENT_ID}&redirect_uri=${"http://localhost:3000"}&response_type=code&scope=email profile`,
+      `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_OAUTH_CLIENT_ID}&redirect_uri=${GOOGLE_OAUTH_REDIRECT_URI}&response_type=code&scope=email profile`,
       "_self"
     );
   };

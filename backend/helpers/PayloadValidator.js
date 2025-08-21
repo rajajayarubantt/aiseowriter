@@ -9,6 +9,9 @@ class PayloadValidator {
 
     const { error } = Schemas[name].validate(payload)
 
+    console.log(error, 'error');
+
+
     const Valid = error ? false : true
 
     if (!Valid) {
@@ -16,6 +19,8 @@ class PayloadValidator {
       return responseHandler.invalidParams({ req, res, name })
 
     }
+
+    return false
 
   }
 }

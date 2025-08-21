@@ -116,11 +116,35 @@
     padding: 8px 12px;
 }
 
+.page-card-main .card-item .card-top-main .action-item {
+    width: 28%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.page-card-main .card-item .card-top-main .icon-btn {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.page-card-main .card-item .card-top-main .icon-btn svg {
+    width: 100%;
+    height: 100%;
+    color: var(--font-gray-color)
+}
+
+
 .page-card-main .card-item .card-details {
+    width: 70%;
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
+
 
 .page-card-main .card-item .card-details .details-id {
     width: 40px;
@@ -144,6 +168,13 @@
     font-weight: var(--font-weight-md);
 
     color: var(--font-dark-color);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .page-card-main .card-item .card-details .details-desc {
@@ -151,6 +182,14 @@
     font-weight: var(--font-weight-sm);
 
     color: var(--font-dark-color);
+
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .page-card-main .card-item .card-action {
@@ -322,9 +361,9 @@
 }
 
 .page-card-main .card-item .card-details .details-content {
+
     display: flex;
     flex-direction: column;
-    gap: 3px;
 }
 
 .page-card-main .card-item .card-details .details-img {
@@ -395,6 +434,30 @@
     fill: var(--primary-color);
 }
 
+
+.page-card-main .card-item .card-connection-coming_soon {
+    background: var(--primary-color);
+}
+
+.page-card-main .card-item .card-connection-coming_soon .label {
+    color: var(--font-light-color);
+}
+
+.page-card-main .card-item .card-connection-coming_soon .icon svg {
+    fill: var(--font-light-color);
+}
+
+
+.page-card-main .card-item .card-connection-coming_soon:hover .label {
+    color: var(--font-light-color);
+}
+
+.page-card-main .card-item .card-connection-coming_soon:hover .icon svg {
+    fill: var(--font-light-color);
+}
+
+
+
 .page-card-main .card-item .card-connection-done {
     background: var(--transparent-success-color);
     border-color: var(--success-color);
@@ -450,7 +513,7 @@
     width: inherit;
     height: inherit;
 
-    fill: var(--font-gray-color);
+    /* fill: var(--font-gray-color); */
 }
 
 /* End Card */

@@ -7,7 +7,7 @@ const AuthHelper = require('../../helpers/auth')
 const { runPreparedQuery } = require('../../helpers/mysqlQuery')
 const requestIp = require('request-ip');
 const FieldsUpdate = require("../../helpers/FieldsUpdate");
-
+const axios = require('axios')
 const PayloadValidator = require('../../helpers/PayloadValidator')
 const payloadValidator = new PayloadValidator()
 
@@ -21,11 +21,9 @@ class Auth {
     async register(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'register', req, res, payload: req.body })
-
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'register', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
             const { email } = req.body
-
-            console.log(email, 'email');
 
 
             const check_user_exist = FieldsUpdate.prepareQueryGeneratore({
@@ -104,6 +102,7 @@ class Auth {
 
             const magic_link = `http://localhost:5000/api/v1/auth/verifylogin?token=${magic_token}&email=${email}`
 
+
             let mail_response = await TemplatedMailer({
                 to: email,
                 message: 'Verify your Login',
@@ -133,8 +132,8 @@ class Auth {
 
     async verifylogin(req, res) {
         try {
-            await payloadValidator.Validate({ name: 'verifylogin', req, res, payload: req.query })
-
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'verifylogin', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
             const { email, token } = req.query
 
             const is_token_valid = await AuthHelper.ValidateJWT(token)
@@ -183,11 +182,119 @@ class Auth {
         }
 
     }
+    async verifyGoogleAuth(req, res) {
+        try {
+
+            const { code } = req.query
+
+            if (!code) return responseHandler.failedRequest({
+                name: 'verifyGoogleAuth',
+                req, res,
+            })
+
+            const tokenResponse = await axios.post("https://oauth2.googleapis.com/token", {
+                code: code,
+                client_id: config.get("GOOGLE_CLIENT_ID"),
+                client_secret: config.get("GOOGLE_CLIENT_SECRET"),
+                redirect_uri: config.get("GOOGLE_REDIRECT_URL"),
+                grant_type: "authorization_code"
+            });
+
+            if (!tokenResponse.data) return responseHandler.failedRequest({
+                name: 'verifyGoogleAuth',
+                req, res,
+            })
+
+            const { access_token } = tokenResponse.data;
+
+            const userInfoResponse = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: { Authorization: `Bearer ${access_token}` }
+            });
+
+            if (!userInfoResponse.data) return responseHandler.failedRequest({
+                name: 'verifyGoogleAuth',
+                req, res,
+            })
+
+            const { sub, name, given_name, family_name, picture, email, email_verified } = userInfoResponse.data
+
+            const check_user_exist = FieldsUpdate.prepareQueryGeneratore({
+                METHOD: 'SELECT',
+                SELECT: `id, name, email, org_id, status, role_type, onboarding_status`,
+                TABEL: mysqlTables.USERS,
+                VALID: {
+                    email: email
+                }
+            })
+
+            let check_user_exist_res = await runPreparedQuery(check_user_exist.query, check_user_exist.value)
+            check_user_exist_res = check_user_exist_res[0]
+
+            const is_exist_user = check_user_exist_res && check_user_exist_res.id
+
+            if (!is_exist_user) {
+
+                const org_id = Utils.getUniqueId()
+
+                let register_data = {
+                    name: name,
+                    google_id: sub,
+                    email,
+                    role_type: 'admin',
+                    status: 1,
+                    login_token: "",
+                    org_id: org_id,
+                    created_by_id: email,
+                    created_by_name: email,
+                }
+
+                const register_query = FieldsUpdate.prepareQueryGeneratore({
+                    METHOD: 'INSERT',
+                    TABEL: mysqlTables.USERS,
+                    DATA: register_data
+                })
+
+                let response = await runPreparedQuery(register_query.query, register_query.value)
+
+                if (!response.affectedRows) return responseHandler.failedRequest({
+                    name: 'verifyGoogleAuth',
+                    req, res,
+                    message: "Failed to register, Please try again!"
+                })
+
+                check_user_exist_res = await runPreparedQuery(check_user_exist.query, check_user_exist.value)
+                check_user_exist_res = check_user_exist_res[0]
+            }
+
+            const login_token = await AuthHelper.GenerateJWTToken({
+                id: check_user_exist_res.id,
+                org_id: check_user_exist_res.org_id,
+                name: check_user_exist_res.name,
+                email: check_user_exist_res.email,
+                role_type: check_user_exist_res.role_type,
+            })
+
+            const json_userdetails = JSON.stringify(check_user_exist_res)
+
+            res.cookie("access_token", login_token, { httpOnly: true, expires: new Date(Date.now() + 60 * 24 * 15 * 60 * 1000) })
+            res.cookie("userdetails", json_userdetails, { httpOnly: true, expires: new Date(Date.now() + 60 * 24 * 15 * 60 * 1000) })
+
+            const redirect_url = `http://localhost:3000/verify-login?access_token=${login_token}&userdetails=${json_userdetails}`
+
+            return res.redirect(redirect_url)
+
+
+        } catch (err) {
+            console.log(err);
+            return responseHandler.serverError({ name: 'verifyGoogleAuth', req, res })
+        }
+
+    }
 
     async onboard(req, res) {
         try {
-            await payloadValidator.Validate({ name: 'onboard', req, res, payload: req.body })
-
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'onboard', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
             const { user_id, user_name, user_email } = req
             const { details } = req.body
             let { name } = details
@@ -227,6 +334,8 @@ class Auth {
             return responseHandler.serverError({ name: 'onboard', req, res })
         }
     }
+
+
 }
 
 module.exports = Auth;

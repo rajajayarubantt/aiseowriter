@@ -26,10 +26,14 @@ const TextInput = ({
   onChange = () => { },
 }) => {
   const handleValueInput = (e) => {
+    if (!e) return onChange("");
     let value = e.target.value;
     onInput(value);
   };
   const handleValueChange = (e) => {
+
+    if (!e) return onChange("");
+
     let value = e.target.value;
 
     onChange(value);
@@ -93,6 +97,7 @@ const TextInput = ({
           required={required}
           readOnly={readonly}
           placeholder={placeholder || ""}
+          onClear={handleValueChange}
           onInput={handleValueInput}
           onChange={handleValueChange}
         />

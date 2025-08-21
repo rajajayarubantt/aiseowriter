@@ -18,7 +18,8 @@ class Schedules {
 
         try {
 
-            await payloadValidator.Validate({ name: 'get_schedules', req, res, payload: req.query })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'get_schedules', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -73,7 +74,8 @@ class Schedules {
     async create_schedules(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'create_schedules', req, res, payload: req.body })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'create_schedules', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -145,7 +147,8 @@ class Schedules {
     async update_schedules(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'update_schedules', req, res, payload: req.body })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'update_schedules', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const {
@@ -224,7 +227,8 @@ class Schedules {
     async delete_schedules(req, res) {
 
         try {
-            await payloadValidator.Validate({ name: 'delete_schedules', req, res, payload: req.body })
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'delete_schedules', req, res, payload: req.body })
+            if (isPayloadInvalid) return isPayloadInvalid
 
             const { org_id, user_id, user_name, user_email } = req
             const { id } = req.body

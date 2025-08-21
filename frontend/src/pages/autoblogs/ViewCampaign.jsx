@@ -107,7 +107,6 @@ const ViewCampaign = ({ callback = () => { } }) => {
     const getCampaign = async () => {
         const filters = {
             id: String(id),
-            columns: '*'
         }
 
         setIsLoading(true)
@@ -174,7 +173,8 @@ const ViewCampaign = ({ callback = () => { } }) => {
         const brand_details = await getBrands({ id: campaign.brand_id })
         const integrations = PlatformsOptions.filter(p => campaign.platforms.includes(p.value))
         const language = getLanguages().filter(l => l.label == (campaign.language || 'English (US)'))[0]
-
+        const articles = campaign.articles || []
+        const post_count = parseInt(campaign.post_count) || 0
 
 
         let infoItems = [
@@ -210,8 +210,8 @@ const ViewCampaign = ({ callback = () => { } }) => {
                 label: 'Published',
                 icon: Icons.default.tv,
                 type: 'progress',
-                value: 50,
-                total: parseInt(campaign.post_count)
+                value: articles.length / post_count * 100,
+                total: post_count
             },
             {
                 label: 'Language',
@@ -364,7 +364,7 @@ const ViewCampaign = ({ callback = () => { } }) => {
                                     to={`/article/${item.id}`}
                                 >
                                     <div className="cards-item-banner">
-                                        <img src={item.cover_image || Images.Default} alt="" />
+                                        <img src={item?.cover_image?.regular || Images.Default} alt="" />
                                     </div>
                                     <div className="cards-item-details">
                                         <div className="details-title">{item.title}</div>

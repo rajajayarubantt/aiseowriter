@@ -28,6 +28,16 @@ class Integration {
 
         return response
     }
+    async update(params) {
+
+        const response = await this.apiHandler.request({
+            method: 'POST',
+            endpoint: "/integration/update",
+            params: params,
+        })
+
+        return response
+    }
 
     async delete(params) {
 
