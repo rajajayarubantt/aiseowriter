@@ -4,6 +4,8 @@ module.exports = {
 	port: process.env.PORT,
 	appSecret: process.env.APP_SECRET,
 
+	BASE_URL: process.env.BASE_URL,
+
 	GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 	GOOGLE_REDIRECT_URL: process.env.GOOGLE_REDIRECT_URL,

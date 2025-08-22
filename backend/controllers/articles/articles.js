@@ -65,6 +65,11 @@ class Articles {
             let response = await req.mongoDB.find(mysqlTables.MONGO_BLOGS, get_query, options)
             let summary_response = await req.mongoDB.aggregate(mysqlTables.MONGO_BLOGS, [
                 {
+                    '$match': {
+                        org_id: org_id
+                    }
+                },
+                {
                     '$group': {
                         _id: "$status",
                         count: { '$sum': 1 }

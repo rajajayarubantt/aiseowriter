@@ -10,9 +10,11 @@
   height: 100%;
 
   display: flex;
+  justify-content: center;
 }
 
 .login-page-main .login-banner {
+  display: none;
   width: calc(100% - var(--login-content-width));
   height: 100%;
   position: relative;
@@ -42,7 +44,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 5px;
   padding: 24px 0;
 }

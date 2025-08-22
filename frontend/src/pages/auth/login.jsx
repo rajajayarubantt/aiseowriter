@@ -37,10 +37,10 @@ const Login = ({ type = 'login' }) => {
   const [warningAlertType, setWarningAlertType] = useState('error')
   const [warningAlertMessage, setwarningAlertMessage] = useState("Failed to login")
 
+
   const handleGoogleLogin = () => {
-    const GOOGLE_OAUTH_CLIENT_ID =
-      "240459934728-jsct47v74s7k18c19nan792kracma9cq.apps.googleusercontent.com";
-    const GOOGLE_OAUTH_REDIRECT_URI = "http://localhost:5000/api/v1/auth/verifygoogleauth";
+    const GOOGLE_OAUTH_CLIENT_ID = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID
+    const GOOGLE_OAUTH_REDIRECT_URI = `${process.env.REACT_APP_BASE_URL}/api/v1/auth/verifygoogleauth`;
 
     window.open(
       `https://accounts.google.com/o/oauth2/auth?client_id=${GOOGLE_OAUTH_CLIENT_ID}&redirect_uri=${GOOGLE_OAUTH_REDIRECT_URI}&response_type=code&scope=email profile`,
@@ -95,7 +95,6 @@ const Login = ({ type = 'login' }) => {
   };
 
   const checkAlreadyLoggedIn = () => {
-    console.log(isAuthenticated, 'isAuthenticated');
 
     if (isAuthenticated) {
       navigator("/", { replace: true });
@@ -200,16 +199,16 @@ const Login = ({ type = 'login' }) => {
 
             <div className="content-redirection">
               By signing {type == 'login' ? 'in' : 'up'}, you agree to our&nbsp;
-              <Link className="primary-text" to={"/terms-of-use"}>
+              <Link className="primary-text" to={"https://aiseowrite.in/terms-of-use"}>
                 Terms of Use
               </Link>
               &nbsp;and <br />
-              <Link className="primary-text" to={"/privacy-policy"}>
+              <Link className="primary-text" to={"https://aiseowrite.in/privacy-policy"}>
                 Privacy Policy
               </Link>
             </div>
           </div>
-          <div className="container-copyright">© ZenSaaS 2025</div>
+          <div className="container-copyright">© AiSEOWrite 2025</div>
         </section>
       </div>
     </>

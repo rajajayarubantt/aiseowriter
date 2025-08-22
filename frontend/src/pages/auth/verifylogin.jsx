@@ -45,7 +45,7 @@ const VerifyLogin = () => {
                 <img className="content-logo" src={Images.Logo} />
                 <div className="content-title">Check your email</div>
                 <div className="content-desc">A sign in link has been sent to <br /> your email address.</div>
-                <Link className="content-copyright" to="/">blogpilot.zensaas.in</Link>
+                <Link className="content-copyright" to="https://aiseowrite.in/" target="_blank">aiseowrite.in</Link>
             </div>
         </div>
     )

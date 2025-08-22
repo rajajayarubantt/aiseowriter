@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 const config = require('config')
 const PAYMENT_GATEWAY_BASE_URL = config.get('PAYMENT_GATEWAY_BASE_URL')
 const PAYMENT_GATEWAY_API_KEY = config.get('PAYMENT_GATEWAY_API_KEY')
-
+const BASE_URL = config.get('BASE_URL')
 const mysqlTables = config.get('mysqlTables')
 
 const Utils = require('../../helpers/utils')
@@ -160,7 +160,7 @@ class Subscriptions {
                 headers: { Authorization: `Bearer ${PAYMENT_GATEWAY_API_KEY}` }
             });
 
-            if (subscriptionResponse.status != 200) return res.redirect("http://localhost:3000/upgrade")
+            if (subscriptionResponse.status != 200) return res.redirect(`${BASE_URL}/upgrade`)
 
             const subScriptionDetails = subscriptionResponse.data || {}
 
@@ -181,7 +181,7 @@ class Subscriptions {
 
             get_user_details_res = get_user_details_res[0]
 
-            if (!get_user_details_res) return res.redirect("http://localhost:3000/upgrade")
+            if (!get_user_details_res) return res.redirect(`${BASE_URL}/upgrade`)
 
             const org_id = get_user_details_res.org_id
 
@@ -221,7 +221,7 @@ class Subscriptions {
             let response = await req.mongoDB.insertOne(mysqlTables.SUBSCRIPTIONS, subscription_data)
 
 
-            return res.redirect("http://localhost:3000")
+            return res.redirect(`${BASE_URL}`)
         }
         catch (err) {
             console.log(err);

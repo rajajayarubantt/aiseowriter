@@ -200,7 +200,7 @@ const Login = ({ type = 'login' }) => {
               </Link>
             </div>
           </div>
-          <div className="container-copyright">© ZenSaaS 2025</div>
+          <div className="container-copyright">© AiSEOWrite 2025</div>
         </section>
       </div>
     </>

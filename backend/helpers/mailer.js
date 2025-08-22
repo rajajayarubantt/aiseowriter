@@ -14,7 +14,7 @@ const Mailer = async ({ to, message, subject, html, file }) => {
     });
 
     let mailOptions = {
-        from: process.env.EMAIL,
+        from: process.env.EMAIL_FROM,
         to: to,
         subject: subject,
         text: message,

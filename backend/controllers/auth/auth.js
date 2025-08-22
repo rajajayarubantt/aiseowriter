@@ -1,6 +1,7 @@
 require('dotenv')
 
 const config = require('config')
+const BASE_URL = config.get('BASE_URL')
 const mysqlTables = config.get('mysqlTables')
 const Utils = require("../../helpers/utils");
 const AuthHelper = require('../../helpers/auth')
@@ -100,7 +101,7 @@ class Auth {
                 })
             }
 
-            const magic_link = `http://localhost:5000/api/v1/auth/verifylogin?token=${magic_token}&email=${email}`
+            const magic_link = `${BASE_URL}/api/v1/auth/verifylogin?token=${magic_token}&email=${email}`
 
 
             let mail_response = await TemplatedMailer({
@@ -172,7 +173,7 @@ class Auth {
             res.cookie("access_token", login_token, { httpOnly: true, expires: new Date(Date.now() + 60 * 24 * 15 * 60 * 1000) })
             res.cookie("userdetails", json_userdetails, { httpOnly: true, expires: new Date(Date.now() + 60 * 24 * 15 * 60 * 1000) })
 
-            const redirect_url = `http://localhost:3000/verify-login?access_token=${login_token}&userdetails=${json_userdetails}`
+            const redirect_url = `${BASE_URL}/verify-login?access_token=${login_token}&userdetails=${json_userdetails}`
 
             return res.redirect(redirect_url)
 
@@ -279,9 +280,11 @@ class Auth {
             res.cookie("access_token", login_token, { httpOnly: true, expires: new Date(Date.now() + 60 * 24 * 15 * 60 * 1000) })
             res.cookie("userdetails", json_userdetails, { httpOnly: true, expires: new Date(Date.now() + 60 * 24 * 15 * 60 * 1000) })
 
-            const redirect_url = `http://localhost:3000/verify-login?access_token=${login_token}&userdetails=${json_userdetails}`
+            const redirect_url = `${BASE_URL}/verify-login?access_token=${login_token}&userdetails=${json_userdetails}`
 
-            return res.redirect(redirect_url)
+            console.log(redirect_url, 'redirect_url');
+
+            // return res.redirect(redirect_url)
 
 
         } catch (err) {
