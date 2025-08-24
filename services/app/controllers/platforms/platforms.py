@@ -40,7 +40,7 @@ class PlatformsController:
         data = {
             'title': article_res.get('title', ''),
             'content': article_res.get('content', ''),
-            'cover_image': article_res.get('cover_image', {}).get('url', ''),
+            'cover_image': article_res.get('cover_image', {}).get('regular', ''),
         }
 
         return self.post(platform, org_id, data)
