@@ -14,6 +14,7 @@ import ActionDropdown from "../../components/ActionDropdown";
 import Loaders from '../../components/Loaders'
 import Toasters from '../../components/Toasters'
 import Cards from '../../components/Cards'
+import NoCreditPopupBtn from '../../components/NoCreditPopupBtn'
 import { PageContainer, PageHeader } from '../../components/Page'
 
 /* Sub Pages */
@@ -490,25 +491,11 @@ const Index = () => {
                             <div></div>
                             <div className="card-actions">
                                 {HasNoLimit ?
-                                    <Popconfirm
-                                        title="Usage limitation"
-                                        description="You have exhausted the the usage with your current plan period."
-                                        okText="Upgrade"
-                                        showCancel={false}
-                                        onConfirm={() => navigator('/upgrade')}
-                                    >
-                                        <button
-                                            type={'button'}
-                                            className={`button button-primary elem-width-auto`}
-                                        >
-                                            <div
-                                                dangerouslySetInnerHTML={{ __html: Icons.default.plus }}
-                                                className="button-icon"
-                                            ></div>
-                                            <div className="button-label">Add Users</div>
+                                    <NoCreditPopupBtn
+                                        icon={Icons.default.plus}
+                                        label="Add Users"
+                                    />
 
-                                        </button>
-                                    </Popconfirm>
                                     :
                                     <Buttons
 

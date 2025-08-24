@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import markdown
-from app.services.llm import LLMService
+from app.services import GenerationService
 
 from app.config import settings
 
@@ -32,6 +32,8 @@ class LinkedinController:
 
         self.mysql_db= app.state.mysql_db
         self.mongo_db= app.state.mongo_db
+
+        self.llm = GenerationService()
 
     def getUserAccessToken(self, org_id):
 
@@ -128,7 +130,7 @@ class LinkedinController:
             "stream": False 
         }
 
-        blog_response = LLMService.generate(payload)
+        blog_response = self.llm.generate(payload)
 
         if not blog_response['success']:
             return content

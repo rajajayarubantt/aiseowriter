@@ -106,6 +106,7 @@ const Articles_Schemas = {
     id: Joi.string().required(),
     title: Joi.string().required(),
     keywords: Joi.array(),
+    title_options: Joi.array(),
     outlines: Joi.array(),
     description: Joi.string().allow(null, ''),
     language: Joi.string().allow(null, ''),

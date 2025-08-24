@@ -148,7 +148,7 @@ const AppIndex = () => {
   useEffect(() => {
 
     getUserDetails()
-    checkSubscription()
+    // checkSubscription()
   }, [])
 
   useEffect(() => {

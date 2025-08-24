@@ -8,8 +8,8 @@ import Images from '../../assets/Images'
 
 /*Components*/
 import Buttons from "../Buttons";
-import { Popconfirm } from 'antd';
 
+import NoCreditPopupBtn from '../NoCreditPopupBtn'
 
 /*Helpers */
 import Utils from "../../helpers/utils";
@@ -50,30 +50,12 @@ const PageHeader = ({ id = Utils.getUniqueId(), title = "", desc = "", actions =
                             className="header-action-button"
                         >
                             {action.has_no_limit ?
-                                <Popconfirm
-                                    title="Usage limitation"
-                                    description="You have exhausted the the usage with your current plan period."
-                                    okText="Upgrade"
-                                    showCancel={false}
-                                    onConfirm={() => navigator('/upgrade')}
-                                >
-                                    <button
-                                        type={'button'}
-                                        key={`${id}-button-main`}
-                                        id={`${id}-button-main`}
-                                        className={`button button-${action.type} elem-width-${action.width}`}
-                                    >
-                                        {action.icon &&
-                                            <div
-                                                dangerouslySetInnerHTML={{ __html: action.icon }}
-                                                className="button-icon"
-                                            ></div>
-                                        }
-                                        {action.label && <div className="button-label">{action.label}</div>}
-
-                                    </button>
-
-                                </Popconfirm> :
+                                <NoCreditPopupBtn
+                                    type={action.type}
+                                    width={action.width}
+                                    icon={action.icon}
+                                    label={action.label}
+                                /> :
                                 <Buttons
                                     type={action.type}
                                     icon={action.icon}

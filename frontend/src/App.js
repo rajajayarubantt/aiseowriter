@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
-/* Redux Setup*/
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from 'react-redux'
+import UserAction from './redux/action/userAction'
 
 /*Custom hook*/
 import { useAuth, AuthProvider } from "./hooks/AuthContext";
@@ -21,7 +20,40 @@ import EditArticle from './pages/articles/EditArticle'
 import Login from "./pages/auth/login";
 import VerifyLogin from "./pages/auth/verifylogin";
 
+/*handler*/
+import SubscriptionsHandler from './handlers/subscriptions/subscriptions'
+
+
 const App = () => {
+
+  const subscriptionsHandler = new SubscriptionsHandler()
+  const dispatch = useDispatch()
+  const store = useSelector(state => state)
+  const { updateState } = new UserAction
+
+  const checkSubscription = async () => {
+
+    const userdetails = JSON.parse(localStorage.getItem('userdetails') || "{}")
+
+    if (!Object.keys(userdetails).length) return
+
+    let response = await subscriptionsHandler.get({})
+
+    if (response.success) {
+
+      dispatch(updateState({
+        type: 'SET_SUBSCRIPTION',
+        payload: {
+          subscription: response.data
+        }
+      }))
+    }
+  }
+
+  useEffect(() => {
+
+    checkSubscription()
+  }, [])
 
   return (
     <AuthProvider>

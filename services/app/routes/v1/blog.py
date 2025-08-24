@@ -43,10 +43,19 @@ def generate_only_outlines(request: dict = Body(...)):
     return response
 
 @router.post("/generate-image")
-def generate_only_outlines(request: dict = Body(...)):
+def generate_image(request: dict = Body(...)):
 
     blog_controller = BlogController(request)
 
     response =  blog_controller._generate_image()
+
+    return response
+
+@router.post("/_generate")
+def _generate(request: dict = Body(...)):
+
+    blog_controller = BlogController(request)
+
+    response =  blog_controller._generate()
 
     return response

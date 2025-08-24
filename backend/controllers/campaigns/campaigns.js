@@ -56,6 +56,11 @@ class Campaigns {
             let response = await req.mongoDB.find(mysqlTables.MONGO_CAMPAIGNS, get_query, options)
             let summary_response = await req.mongoDB.aggregate(mysqlTables.MONGO_CAMPAIGNS, [
                 {
+                    '$match': {
+                        org_id: org_id
+                    }
+                },
+                {
                     '$group': {
                         _id: "$status",
                         count: { '$sum': 1 }

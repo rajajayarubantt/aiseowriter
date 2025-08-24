@@ -1,7 +1,37 @@
 import re
 import json
-from app.services.unsplash import UnsplashClient
-from app.services.llm import LLMService
+from app.helpers.unsplash import UnsplashClient
+from app.services import GenerationService
+
+
+def json_fixer(json_str: str):
+    """
+    Try to validate and fix a JSON string by adding missing commas.
+    Returns a Python dict if successful, raises ValueError otherwise.
+    """
+
+    # First, try parsing directly
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError:
+        pass  # Continue to fixing step
+
+    # Fix: Add missing commas between } { or ] [
+    fixed = re.sub(r'}\s*{', '}, {', json_str)
+    fixed = re.sub(r'"\s*"', '", "', fixed)  # between strings
+    fixed = re.sub(r'(\d)\s*"', r'\1, "', fixed)  # number before string
+    fixed = re.sub(r'"\s*(\d)', r'", \1', fixed)  # string before number
+    fixed = re.sub(r'}\s*"', '}, "', fixed)
+    fixed = re.sub(r'"\s*}', '", }', fixed)
+    fixed = re.sub(r']\s*"', '], "', fixed)
+    fixed = re.sub(r'"\s*\[', '", [', fixed)
+
+    # Try parsing again
+    try:
+        return json.loads(fixed)
+    except json.JSONDecodeError as e:
+        print(f"Could not fix JSON: {e}\nFixed string:\n{fixed}")
+        return None
 
 class BlogController:
 
@@ -9,10 +39,15 @@ class BlogController:
         self.params = params
         self.max_char = 2500
         self.unsplashClient = UnsplashClient()
+        self.llm = GenerationService()
 
     def process_generate(self, payload):
 
-        return  LLMService.generate(payload)
+        return  self.llm.generate(payload)
+    
+    def _process_generate(self, payload):
+
+        return  self.llm.generate(payload)
 
     def generate_inputs(self, params):
 
@@ -356,7 +391,8 @@ class BlogController:
     def _extract_json(self, result):
 
         try:
-            return json.loads(result)
+            return json_fixer(result)
+
         except json.JSONDecodeError as e:
             print(f'JSON Error str({e}) \n')
             pass  
@@ -365,11 +401,12 @@ class BlogController:
         if match:
             json_str = match.group(1).strip()
             try:
-                return json.loads(json_str)
+                return json_fixer(json_str)
             except json.JSONDecodeError as e:
                 print(f"Invalid JSON in code block: {str(e)}")
-
-        print("No valid JSON found.")
+                pass
+        
+        
         return None
     
     def _extract_markdown(self, result):
@@ -531,7 +568,7 @@ class BlogController:
         
         elif type == 'ai':
 
-            img_res = LLMService.generate_imge({'prompt': query})
+            img_res = self.llm.generate_imge({'prompt': query})
 
             if img_res.get('success'):
                 image_url = img_res.get('data')
@@ -565,6 +602,13 @@ class BlogController:
             return blog_response
         
         data = self._extract_json(blog_response['data'])
+
+        if not data:
+            return {
+            "success": False,
+            "message": 'Invalid Json Error'
+        }
+
         content = data.get('content', '')
         meta_description = data.get('meta_description', '')
         unsplash_image_query = data.get('unsplash_image_query', '')
@@ -593,6 +637,20 @@ class BlogController:
             },
             "message": blog_response['message']
         }
+    
+    def _generate(self):
+
+        prompt = self.params.get('prompt')
+
+        payload = {
+            "prompt": prompt,
+            'format': 'text'
+        }
+
+        
+        blog_response =  self._process_generate(payload)
+
+        return blog_response
 
     def _generate_image(self):
 
@@ -601,4 +659,4 @@ class BlogController:
         }
 
         
-        return  LLMService.generate_imge(payload)
+        return  self.llm.generate_imge(payload)

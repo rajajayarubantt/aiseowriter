@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Steps, Radio } from 'antd';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-
+import { useSelector } from 'react-redux'
 /*Assets*/
 import Images from "../../assets/Images";
 import Icons from "../../assets/Icons";
@@ -12,6 +12,7 @@ import InputWrapper from "../../components/Inputs/Wrapper";
 import Loaders from '../../components/Loaders'
 import Toasters from '../../components/Toasters'
 import Buttons from '../../components/Buttons'
+import NoCreditPopupBtn from '../../components/NoCreditPopupBtn'
 
 /*Constant Data*/
 import { LanguagesData } from '../../data/data'
@@ -28,6 +29,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
     const [warningAlertType, setWarningAlertType] = useState('error')
     const [warningAlertMessage, setwarningAlertMessage] = useState("Request failed, Please try again")
 
+    const store = useSelector(state => state)
 
     const [Language, setLanguage] = useState(LanguagesData[0])
     const [TitleOptions, setTitleOptions] = useState([])
@@ -97,9 +99,11 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
 
     ]
 
+    const [isFreePlan, setIsFreePlan] = useState(false)
 
     const [Form_Data, setForm_Data] = useState({
         title: TitleOptions[0],
+        title_options: TitleOptions,
         outlines: [...initialOutlineItems],
         tone: ToneOptions[0].value,
         view: ViewOptions[0].value,
@@ -168,6 +172,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
     const reGenerate = async (key) => {
 
 
+        return
         let payload = {
             id: data.id,
             brand_id: data.brand_id,
@@ -207,6 +212,88 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
             setForm_Data({ ...Form_Data, 'outlines': outlines })
         }
     }
+
+    const [ActiveEditTitleIdx, setActiveEditTitleIdx] = useState(null)
+    const [ActiveEditTitleValue, setActiveEditTitleValue] = useState('')
+
+    const [ActiveEditOutlineIdx, setActiveEditOutlineIdx] = useState(null)
+    const [ActiveEditOutlineValue, setActiveEditOutlineValue] = useState('')
+
+    const setEditTitle = async (idx, value) => {
+        setActiveEditTitleIdx(idx)
+        setActiveEditTitleValue(value)
+    }
+    const handleEditTitle = async (idx, value) => {
+
+        if (TitleOptions.length > idx) {
+            let titleOptions = [...TitleOptions]
+
+            if (Form_Data.title == titleOptions[idx]) setForm_Data({ ...Form_Data, 'title': value })
+
+            titleOptions[idx] = value
+            setTitleOptions(titleOptions)
+        }
+
+        setActiveEditTitleIdx(null)
+        setActiveEditTitleValue('')
+    }
+    const handleEditCancelTitle = async () => {
+
+        setActiveEditTitleIdx(null)
+        setActiveEditTitleValue('')
+    }
+
+    const setEditOutline = async (idx, value) => {
+        setActiveEditOutlineIdx(idx)
+        setActiveEditOutlineValue(value)
+    }
+    const handleEditOutline = async (idx, value) => {
+
+        if (Form_Data.outlines.length > idx) {
+            let outlines = [...Form_Data.outlines]
+            outlines[idx] = value
+
+            setForm_Data({ ...Form_Data, 'outlines': outlines })
+        }
+
+        setActiveEditOutlineIdx(null)
+        setActiveEditOutlineValue('')
+    }
+    const handleEditCancelOutline = async () => {
+        setActiveEditOutlineIdx(null)
+        setActiveEditOutlineValue('')
+    }
+
+    const handleDeleteOutline = (idx) => {
+        const outlines = Form_Data.outlines.filter((_, index) => index !== idx)
+        setForm_Data({ ...Form_Data, 'outlines': outlines })
+    }
+
+    const handleAddOutline = () => {
+        const _outlines = [...Form_Data.outlines]
+        _outlines.push('')
+        setForm_Data({ ...Form_Data, 'outlines': _outlines })
+
+        setTimeout(() => {
+            setActiveEditOutlineIdx(_outlines.length - 1)
+            setActiveEditOutlineValue('')
+
+            const outlineContainer = document.querySelector('#outline-items-section')
+            if (outlineContainer) {
+
+                outlineContainer.scrollTo({
+                    top: outlineContainer.scrollHeight + 1000,
+                    behavior: 'smooth'
+                })
+            }
+        }, 100)
+    }
+
+    useEffect(() => {
+
+        if (store.user.subscription) setIsFreePlan(store.user.subscription.is_freeplan)
+
+    }, [store.user.subscription])
 
     useEffect(() => {
         setArticle(data)
@@ -319,16 +406,28 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                         <div className="section-header">
                             <div className="section-header-title">Title</div>
                             <div className="section-header-actions">
-                                <Buttons
-                                    type="outline"
-                                    icon={Icons.default.refresh}
-                                    width="auto"
-                                    label="Regenerate"
-                                    _style={{
-                                        minHeight: '1.8rem'
-                                    }}
-                                    callback={() => reGenerate('title')}
-                                />
+
+                                {isFreePlan ?
+                                    <NoCreditPopupBtn
+                                        title="Unlock this feature"
+                                        description="Upgrade Plan to unlock this feature."
+                                        type="outline"
+                                        icon={Icons.default.refresh}
+                                        width="auto"
+                                        label="Regenerate"
+                                    />
+                                    :
+
+                                    <Buttons
+                                        type="outline"
+                                        icon={Icons.default.refresh}
+                                        width="auto"
+                                        label="Regenerate"
+                                        _style={{
+                                            minHeight: '1.8rem'
+                                        }}
+                                        callback={() => reGenerate('title')}
+                                    />}
                             </div>
                         </div>
                         <div className="section-items">
@@ -337,13 +436,44 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                     key={`article-title-section-${idx}`}
                                     className={`section-item ${Form_Data.title == item && 'section-item-active'}`}
                                 >
-                                    <div className="section-item-action"
-                                        dangerouslySetInnerHTML={{ __html: Icons.default.edit }}
-                                    ></div>
-                                    <Radio
-                                        checked={Form_Data.title == item}
-                                        onChange={() => handleInputChange('title', item)}
-                                    >{item}</Radio>
+                                    {ActiveEditTitleIdx == idx ?
+                                        <div className="section-item-input-main">
+                                            <input
+                                                type="text"
+                                                className="section-item-input"
+                                                value={ActiveEditTitleValue}
+                                                onChange={(e) => setActiveEditTitleValue(e.target.value)}
+                                                placeholder="Enter the modified title here"
+                                            />
+                                            <div className="section-item-input-actions">
+                                                <div className="action-item"
+                                                    onClick={() => handleEditCancelTitle()}
+                                                >Cancel</div>
+                                                <div
+                                                    className="action-item action-primary"
+
+                                                    onClick={() => handleEditTitle(idx, ActiveEditTitleValue)}
+                                                >Save</div>
+                                            </div>
+
+                                        </div>
+                                        :
+                                        <>
+                                            <div className="section-item-actions">
+                                                <div className="section-item-action"
+                                                    dangerouslySetInnerHTML={{ __html: Icons.default.edit }}
+                                                    onClick={() => setEditTitle(idx, item)}
+                                                ></div>
+                                            </div>
+
+
+
+                                            <Radio
+                                                checked={Form_Data.title == item}
+                                                onChange={() => handleInputChange('title', item)}
+                                            >{item}</Radio>
+                                        </>
+                                    }
                                 </div>
                             ))}
 
@@ -353,7 +483,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                         <div className="section-header">
                             <div className="section-header-title">Article Outline</div>
                             <div className="section-header-actions">
-                                <Inputs
+                                {/* <Inputs
                                     id="article-outline-sections"
                                     type="number"
                                     width='xs'
@@ -362,28 +492,42 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                         style: {
                                             height: '1.8rem'
                                         },
+                                        max: 10,
                                         value: Form_Data.outlines.length,
                                     }}
-                                />
-                                <Buttons
-                                    type="outline"
-                                    icon={Icons.default.refresh}
-                                    width="auto"
-                                    label=""
-                                    _style={{
-                                        minHeight: '1.8rem'
-                                    }}
-                                    callback={() => reGenerate('outline')}
+                                /> */}
 
-                                />
+                                {isFreePlan ?
+                                    <NoCreditPopupBtn
+                                        title="Unlock this feature"
+                                        description="Upgrade Plan to unlock this feature."
+                                        type="outline"
+                                        icon={Icons.default.refresh}
+                                        width="auto"
+                                        label="Regenerate"
+                                    />
+                                    :
+
+                                    <Buttons
+                                        type="outline"
+                                        icon={Icons.default.refresh}
+                                        width="auto"
+                                        label=""
+                                        _style={{
+                                            minHeight: '1.8rem'
+                                        }}
+                                        callback={() => reGenerate('outline')}
+                                    />}
+
                                 <Buttons
                                     type="outline"
                                     icon={Icons.default.plus}
                                     width="auto"
-                                    label="Add heading"
+                                    label="Add"
                                     _style={{
                                         minHeight: '1.8rem'
                                     }}
+                                    callback={() => handleAddOutline()}
                                 />
                             </div>
                         </div>
@@ -394,6 +538,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
                                         className="section-items"
+                                        id="outline-items-section"
                                     >
                                         {Form_Data.outlines.map((item, index) => (
                                             <Draggable
@@ -408,15 +553,47 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
                                                         {...provided.dragHandleProps}
                                                         className={`section-item ${snapshot.isDragging ? "section-item-dragging" : ""}`}
                                                     >
-                                                        <div
-                                                            className="section-item-action"
-                                                            dangerouslySetInnerHTML={{ __html: Icons.default.delete }}
-                                                        ></div>
-                                                        <div
-                                                            className="section-item-icon"
-                                                            dangerouslySetInnerHTML={{ __html: Icons.default.draggable }}
-                                                        ></div>
-                                                        <div className="section-item-label">{item}</div>
+                                                        {ActiveEditOutlineIdx == index ?
+                                                            <div className="section-item-input-main">
+                                                                <input
+                                                                    type="text"
+                                                                    className="section-item-input"
+                                                                    value={ActiveEditOutlineValue}
+                                                                    onChange={(e) => setActiveEditOutlineValue(e.target.value)}
+                                                                    placeholder="Enter the modified outline here"
+                                                                />
+                                                                <div className="section-item-input-actions">
+                                                                    <div className="action-item"
+                                                                        onClick={() => handleEditCancelOutline()}
+                                                                    >Cancel</div>
+                                                                    <div
+                                                                        className="action-item action-primary"
+                                                                        onClick={() => handleEditOutline(index, ActiveEditOutlineValue)}
+                                                                    >Save</div>
+                                                                </div>
+                                                            </div>
+                                                            :
+                                                            <>
+                                                                <div
+                                                                    className="section-item-actions">
+                                                                    <div
+                                                                        className="section-item-action"
+                                                                        dangerouslySetInnerHTML={{ __html: Icons.default.edit }}
+                                                                        onClick={() => setEditOutline(index, item)}
+                                                                    ></div>
+                                                                    <div
+                                                                        className="section-item-action"
+                                                                        dangerouslySetInnerHTML={{ __html: Icons.default.delete }}
+                                                                        onClick={() => handleDeleteOutline(index)}
+                                                                    ></div>
+                                                                </div>
+                                                                <div
+                                                                    className="section-item-icon"
+                                                                    dangerouslySetInnerHTML={{ __html: Icons.default.draggable }}
+                                                                ></div>
+                                                                <div className="section-item-label">{item}</div>
+                                                            </>
+                                                        }
                                                     </div>
                                                 )}
                                             </Draggable>

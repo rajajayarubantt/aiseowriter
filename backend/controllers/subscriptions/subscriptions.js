@@ -20,6 +20,11 @@ const payloadValidator = new PayloadValidator()
 
 class Subscriptions {
 
+    constructor() {
+
+        this.subscribe_free_plan = this.subscribe_free_plan.bind(this)
+    }
+
     async get_subscription_plans(req, res) {
 
         try {
@@ -35,7 +40,7 @@ class Subscriptions {
             } = req.query
 
             const get_query = {
-                status: '1'
+                status: 1
             }
 
             if (id) get_query['_id'] = new ObjectId(id)
@@ -57,6 +62,9 @@ class Subscriptions {
                 })
 
             }
+
+            console.log(get_query, 'get_query');
+
 
             let response = await req.mongoDB.find(mysqlTables.SUBSCRIPTION_PLANS, get_query, options)
 
@@ -142,6 +150,48 @@ class Subscriptions {
         }
     }
 
+    async subscribe_free_plan({ req, email, org_id }) {
+
+        try {
+
+            const FREE_TRAIL_PERIOD = 7 //days
+            const expires_at = new Date().setDate(new Date().getDate() + FREE_TRAIL_PERIOD)
+
+            let plan_response = await req.mongoDB.findOne(mysqlTables.SUBSCRIPTION_PLANS, { is_freeplan: true })
+
+
+            if (!plan_response) return false
+
+            plan_response.blog_count = parseInt(plan_response.blog_count)
+            plan_response.image_count = parseInt(plan_response.image_count)
+            plan_response.keywords_count = parseInt(plan_response.keywords_count)
+            plan_response.monthly_price = parseInt(plan_response.monthly_price)
+            plan_response.sitemap_count = parseInt(plan_response.sitemap_count)
+
+            const subscription_data = {
+                org_id: org_id,
+                paid_by: email,
+                subscription_id: 'free',
+                subscription_details: {},
+                payment_status: 'active',
+                plan_details: plan_response,
+                total_credits: parseInt(plan_response.blog_count),
+                used_credits: 0,
+                balance_credits: parseInt(plan_response.blog_count),
+                status: 1,
+                expires_at: new Date(expires_at).getTime(),
+                created_at: new Date().getTime()
+            }
+
+            let response = await req.mongoDB.insertOne(mysqlTables.SUBSCRIPTIONS, subscription_data)
+
+            return true
+        }
+        catch (err) {
+            console.log(err);
+            return false
+        }
+    }
     async subscribe(req, res) {
 
         try {
@@ -212,6 +262,12 @@ class Subscriptions {
             let plan_response = await req.mongoDB.findOne(mysqlTables.SUBSCRIPTION_PLANS, subscription_plan_query)
 
             if (plan_response) {
+
+                plan_response.blog_count = parseInt(plan_response.blog_count)
+                plan_response.image_count = parseInt(plan_response.image_count)
+                plan_response.keywords_count = parseInt(plan_response.keywords_count)
+                plan_response.monthly_price = parseInt(plan_response.monthly_price)
+                plan_response.sitemap_count = parseInt(plan_response.sitemap_count)
 
                 subscription_data['plan_details'] = plan_response
                 subscription_data['total_credits'] = parseInt(plan_response.blog_count)

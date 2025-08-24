@@ -385,6 +385,7 @@ class Articles {
             const {
                 id,
                 title,
+                title_options,
                 keywords,
                 outlines,
                 description,
@@ -461,6 +462,13 @@ class Articles {
 
             const mongo_update_data = {
                 $set: {
+                    title: title,
+                    title_options: title_options,
+                    outlines: outlines,
+                    tone: tone,
+                    view: view,
+                    length: length,
+                    inter_links: inter_links,
                     content: article_content,
                     status: 1,
                     meta_description: meta_description,

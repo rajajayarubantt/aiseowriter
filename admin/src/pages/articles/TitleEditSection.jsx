@@ -343,7 +343,7 @@ const TitleEditSection = ({ data, callback = () => { } }) => {
 
                         </div>
                     </div>
-                    <div className="article-content-section">
+                    <div className="article-content-section" style={{ overflow: 'auto' }}>
                         <div className="section-header">
                             <div className="section-header-title">Article Outline</div>
                             <div className="section-header-actions">

@@ -1,18 +1,43 @@
-import requests
+import json
+import re
 
-# {"cms": "686152cc948480e660696a31", "site": "68599e040043e25a6cdbdf9e", "post_status": "draft"}
+def fix_and_validate_json(json_str: str):
+    """
+    Try to validate and fix a JSON string by adding missing commas.
+    Returns a Python dict if successful, raises ValueError otherwise.
+    """
 
-auth_token = "3ff5e0c68f276a0aaf64068bf74ae2a007613e55ddd55a2dd0243ad2f084f709"
-site_id = "686152cc948480e660696a31"
+    # First, try parsing directly
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError:
+        pass  # Continue to fixing step
 
-headers = {
-    'Authorization': f'Bearer {auth_token}',
-    'accept-version': '1.0.0'
+    # Fix: Add missing commas between } { or ] [
+    fixed = re.sub(r'}\s*{', '}, {', json_str)
+    fixed = re.sub(r'"\s*"', '", "', fixed)  # between strings
+    fixed = re.sub(r'(\d)\s*"', r'\1, "', fixed)  # number before string
+    fixed = re.sub(r'"\s*(\d)', r'", \1', fixed)  # string before number
+    fixed = re.sub(r'}\s*"', '}, "', fixed)
+    fixed = re.sub(r'"\s*}', '", }', fixed)
+    fixed = re.sub(r']\s*"', '], "', fixed)
+    fixed = re.sub(r'"\s*\[', '", [', fixed)
+
+    # Try parsing again
+    try:
+        return json.loads(fixed)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Could not fix JSON: {e}\nFixed string:\n{fixed}")
+
+# Example usage
+broken_json = '''
+{
+  "name": "Alice"
+  "age": 25
+  "skills": ["Python" "React"]
+  "active": true
 }
+'''
 
-# List all collections first
-list_url = f"https://api.webflow.com/v2/collections/{site_id}"
-response = requests.get(list_url, headers=headers)
-
-print(f"Status Code: {response.status_code}")
-print(f"Response: {response.text}")
+fixed_obj = fix_and_validate_json(broken_json)
+print(fixed_obj)

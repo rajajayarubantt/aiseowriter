@@ -23,8 +23,8 @@ import SubscriptionsHandler from '../../handlers/subscriptions/subscriptions'
 const Index = () => {
 
 
-    const REDIRECTION_URL = "https://aiseowrite.in/subscribe"
-    const BASE_URL = "https://test.checkout.dodopayments.com/buy"
+    const REDIRECTION_URL = process.env.REACT_APP_PAYMENT_BASE_URL
+    const BASE_URL = process.env.REACT_APP_PAYMENT_REDIRECTION_URL
 
     const navigator = useNavigate()
     const subscriptionsHandler = new SubscriptionsHandler()
@@ -39,6 +39,7 @@ const Index = () => {
     const [Plans, setPlans] = useState([])
     const [DurationType, setDurationType] = useState('yearly')
     const [ActivePlan, setActivePlan] = useState('')
+    const [isFreePlan, setIsFreePlan] = useState(true)
 
     const Yearly_offer_percentage = 50
 
@@ -96,7 +97,7 @@ const Index = () => {
 
         if (ActivePlan == _id) return
 
-        if (ActivePlan) {
+        if (ActivePlan && !isFreePlan) {
             navigator('/support')
             return
         }
@@ -136,6 +137,7 @@ const Index = () => {
 
         if (store.user.subscription.plan_id) {
             setActivePlan(store.user.subscription.plan_id)
+            setIsFreePlan(store.user.subscription.is_freeplan)
         }
 
     }, [store.user.subscription])
@@ -207,7 +209,7 @@ const Index = () => {
                                         type="primary"
                                         icon=""
                                         width="max"
-                                        label={plan._id == ActivePlan ? "Your Active Plan" : ActivePlan ? 'Contact for Plan Change' : "Upgrade"}
+                                        label={plan._id == ActivePlan ? "Your Active Plan" : ActivePlan && !isFreePlan ? 'Contact for Plan Change' : "Upgrade"}
                                         callback={() => handleUpgrade(plan)}
                                     />
                                 </div>

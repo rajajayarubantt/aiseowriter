@@ -17,6 +17,10 @@ const responseHandler = new ResponseHandler()
 
 const { TemplatedMailer } = require('../../helpers/templatedMailer')
 
+
+const SubscriptionController = require('../subscriptions/subscriptions')
+const subscriptionController = new SubscriptionController()
+
 class Auth {
 
     async register(req, res) {
@@ -49,6 +53,18 @@ class Auth {
 
                 const org_id = Utils.getUniqueId()
 
+                let subscription_response = await subscriptionController.subscribe_free_plan({
+                    email,
+                    org_id,
+                    req
+                })
+
+                if (!subscription_response) return responseHandler.failedRequest({
+                    name: 'register',
+                    req, res,
+                    message: "Failed to subscribe to free plan, Please try again!"
+                })
+
                 let register_data = {
                     email,
                     role_type: 'admin',
@@ -72,6 +88,8 @@ class Auth {
                     req, res,
                     message: "Failed to register, Please try again!"
                 })
+
+
             }
             else {
                 // login code
@@ -102,6 +120,8 @@ class Auth {
             }
 
             const magic_link = `${BASE_URL}/api/v1/auth/verifylogin?token=${magic_token}&email=${email}`
+
+            console.log(magic_link, 'magic_link \n');
 
 
             let mail_response = await TemplatedMailer({

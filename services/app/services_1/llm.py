@@ -1,7 +1,7 @@
 import requests
 import re
 
-from app.services.gemini import GenerationService
+from app.services_1.gemini import GenerationService
 
 class LLMService:
 
