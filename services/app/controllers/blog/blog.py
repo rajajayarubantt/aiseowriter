@@ -464,6 +464,8 @@ class BlogController:
         
         data = self._extract_json(blog_response['data'])
 
+        print(data, 'data \n')
+
         return {
             "success": True,
             'data': data,
@@ -602,6 +604,8 @@ class BlogController:
             return blog_response
         
         data = self._extract_json(blog_response['data'])
+
+        print(data, 'data \n')
 
         if not data:
             return {
