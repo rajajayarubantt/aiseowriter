@@ -61,7 +61,7 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
         <Button
           variant={isPopular ? "primary" : "outline"}
           fullWidth
-          href="/#early-access"
+          href="https://app.aiseowrite.in/signup"
         >
           {ctaText}
         </Button>
@@ -88,7 +88,7 @@ const PricingSection: React.FC = () => {
         "10+ Apps Integration",
         "Email support",
       ],
-      ctaText: "Get Early Access",
+      ctaText: "Get started for free",
     },
     {
       name: "Starter",
@@ -108,7 +108,7 @@ const PricingSection: React.FC = () => {
         "Priority Email & Live Chat support",
       ],
       isPopular: true,
-      ctaText: "Get Early Access",
+      ctaText: "Get started for free",
     },
     {
       name: "Enterprise",
@@ -129,7 +129,7 @@ const PricingSection: React.FC = () => {
         "Analytics dashboard",
         "Priority Email & Live Chat Support",
       ],
-      ctaText: "Get Early Access",
+      ctaText: "Get started for free",
     },
   ];
 

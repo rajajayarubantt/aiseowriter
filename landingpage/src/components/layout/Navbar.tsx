@@ -81,8 +81,8 @@ const Navbar: React.FC = () => {
           </nav>
 
           <div className="hidden md:block">
-            <Button href="/#early-access" variant="primary">
-              Unlock Early Access
+            <Button href="https://app.aiseowrite.in/login" variant="primary">
+              Log In
             </Button>
           </div>
 
@@ -125,8 +125,12 @@ const Navbar: React.FC = () => {
               >
                 Blog
               </a>
-              <Button href="/#early-access" variant="primary" fullWidth>
-                Unlock Early Access
+              <Button
+                href="https://app.aiseowrite.in/login"
+                variant="primary"
+                fullWidth
+              >
+                Log In
               </Button>
             </nav>
           </div>

@@ -50,8 +50,8 @@ const HeroSection: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-              <Button href="/#early-access" size="lg">
-                Get Early Access <ArrowRight className="ml-2 h-5 w-5" />
+              <Button href="https://app.aiseowrite.in/signup" size="lg">
+                Get started for free <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button href="/#demo" variant="outline" size="lg">
                 Watch Demo

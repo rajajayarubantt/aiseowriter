@@ -15,6 +15,10 @@ export const metadata: Metadata = {
   title: "Ai SEO Writer  - AI SEO Writer that Auto-Publishes to your Blog",
   description:
     "Ai SEO Writer  is an AI-powered SEO writer that automatically generates, publishes, syndicates, and updates blog articles for your website.",
+  icons: {
+    icon: "/favicon.ico",
+  },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({

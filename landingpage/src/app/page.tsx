@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <main>
       <HeroSection />
-      <EarlyAccessSection />
+      {/* <EarlyAccessSection /> */}
       <DemoVideoSection />
       <FeaturesSection />
       <UseCasesSection />

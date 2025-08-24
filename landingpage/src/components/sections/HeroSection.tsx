@@ -30,7 +30,7 @@ const HeroSection: React.FC = () => {
           >
             <div className="inline-flex items-center bg-muted px-3 py-1 rounded-full text-sm mb-4 border border-gray-300">
               <span className="bg-blue-600 h-2 w-2 rounded-full mr-2"></span>
-              <span className="font-medium">Early Access Program Now Open</span>
+              <span className="font-medium">#1 AI SEO Copilot</span>
             </div>
 
             <h1 className="text-4xl text-center md:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -55,12 +55,12 @@ const HeroSection: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
-              <Button href="/#early-access" size="lg">
+              <Button href="https://app.aiseowrite.in/signup" size="lg">
                 <div
                   className="mr-2 h-5 w-5 fill-gray-100"
                   dangerouslySetInnerHTML={{ __html: Icons.default.rocket }}
                 ></div>{" "}
-                Get Early Access
+                Get started for free
               </Button>
               <Button href="/#demo" variant="outline" size="lg">
                 Watch Demo
