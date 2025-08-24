@@ -1,2 +1,17 @@
+fastapi
 azure-ai-inference
 azure-core
+boto3>=1.28.0
+tqdm>=4.65.0
+bcrypt
+schedule
+uvicorn
+langgraph
+google-genai
+pymongo
+PyJWT
+dotenv
+pydantic_settings
+PIL
+pillow
+redis

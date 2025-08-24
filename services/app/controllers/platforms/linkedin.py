@@ -215,9 +215,10 @@ class LinkedinController:
             user_id = self.getUserId(access_token)
 
             response = self.post(user_id, access_token, data)
+            response_msg = response.get('message', {})
 
             if not response or not response.get('success'):
-                return {"success": False, "message": f'Error in Linkedin blog posting, {str(response['message'])}'}
+                return {"success": False, "message": f'Error in Linkedin blog posting, {response_msg}'}
             
             return {"success": True, "message": 'Blog Posted to Linkedin Successfully!'}
         
