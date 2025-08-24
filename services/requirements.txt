@@ -15,3 +15,7 @@ pydantic_settings
 PIL
 pillow
 redis
+beautifulsoup4
+markdown
+mistune
+pymysql
