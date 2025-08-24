@@ -43,6 +43,8 @@ class PlatformsController:
             'cover_image': article_res.get('cover_image', {}).get('regular', ''),
         }
 
+        print(data, 'data \n')
+
         return self.post(platform, org_id, data)
 
     def post(self, platform, org_id, data):
