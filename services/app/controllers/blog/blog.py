@@ -389,25 +389,14 @@ class BlogController:
             return None
     
     def _extract_json(self, result):
+        match = re.search(r'```json\s*(.*?)\s*```', result, re.DOTALL)
+        json_str = match.group(1).strip() if match else result
 
         try:
-            return json_fixer(result)
-
+            return json_fixer(json_str)
         except json.JSONDecodeError as e:
-            print(f'JSON Error str({e}) \n')
-            pass  
-
-        match = re.search(r'```json\s*(.*?)\s*```', result, re.DOTALL)
-        if match:
-            json_str = match.group(1).strip()
-            try:
-                return json_fixer(json_str)
-            except json.JSONDecodeError as e:
-                print(f"Invalid JSON in code block: {str(e)}")
-                pass
-        
-        
-        return None
+            print(f"Invalid JSON: {str(e)}")
+            return None
     
     def _extract_markdown(self, result):
    
@@ -465,6 +454,12 @@ class BlogController:
         data = self._extract_json(blog_response['data'])
 
         print(data, 'data \n')
+
+        if not data:
+            return {
+            "success": False,
+            "message": 'Invalid Json Error'
+        }
 
         return {
             "success": True,
