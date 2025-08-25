@@ -304,7 +304,7 @@ class Auth {
 
             console.log(redirect_url, 'redirect_url');
 
-            // return res.redirect(redirect_url)
+            return res.redirect(redirect_url)
 
 
         } catch (err) {
