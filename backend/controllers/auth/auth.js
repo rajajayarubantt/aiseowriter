@@ -257,6 +257,18 @@ class Auth {
 
                 const org_id = Utils.getUniqueId()
 
+                let subscription_response = await subscriptionController.subscribe_free_plan({
+                    email,
+                    org_id,
+                    req
+                })
+
+                if (!subscription_response) return responseHandler.failedRequest({
+                    name: 'register',
+                    req, res,
+                    message: "Failed to subscribe to free plan, Please try again!"
+                })
+
                 let register_data = {
                     name: name,
                     google_id: sub,
