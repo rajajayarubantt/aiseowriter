@@ -326,6 +326,35 @@ class Auth {
 
     }
 
+    async internalSubscribe(req, res) {
+        try {
+
+            const { email, org_id } = req.query
+
+            let subscription_response = await subscriptionController.subscribe_free_plan({
+                email,
+                org_id,
+                req
+            })
+
+            if (!subscription_response) return responseHandler.failedRequest({
+                name: 'register',
+                req, res,
+                message: "Failed to subscribe to free plan, Please try again!"
+            })
+
+            return responseHandler.successRequest({
+                name: 'register',
+                req, res,
+                message: "Subscribed successfully!"
+            })
+
+        } catch (err) {
+            console.log(err);
+            return responseHandler.serverError({ name: 'verifyGoogleAuth', req, res })
+        }
+    }
+
     async onboard(req, res) {
         try {
             const isPayloadInvalid = await payloadValidator.Validate({ name: 'onboard', req, res, payload: req.body })

@@ -9,6 +9,7 @@ const Verifytoken = require('../../../middlewares/verifytoken')
 const verifytoken = new Verifytoken()
 
 Routes.post('/register', authController.register)
+Routes.post('/internalSubscribe', authController.internalSubscribe)
 Routes.get('/verifylogin', authController.verifylogin)
 Routes.get('/verifygoogleauth', authController.verifyGoogleAuth)
 Routes.post('/onboard', verifytoken.verify, authController.onboard)
