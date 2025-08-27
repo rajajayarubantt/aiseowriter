@@ -329,7 +329,7 @@ class Auth {
     async internalSubscribe(req, res) {
         try {
 
-            const { email, org_id } = req.query
+            const { email, org_id } = req.body
 
             let subscription_response = await subscriptionController.subscribe_free_plan({
                 email,
