@@ -378,6 +378,15 @@ const Admin_Schemas = {
     id: Joi.string().required(),
   }),
 
+
+  admin_get_customers: Joi.object({
+    id: Joi.string().allow('', null),
+    columns: Joi.string().allow('', null),
+    search: Joi.string().allow('', null),
+    page: Joi.number().allow(null),
+    limit: Joi.number().allow(null),
+  }),
+
   admin_get_plans: Joi.object({
     id: Joi.string().allow('', null),
     search: Joi.string().allow('', null),

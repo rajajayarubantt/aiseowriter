@@ -216,7 +216,7 @@ class Admin {
         }
         catch (err) {
             console.log(err);
-            return responseHandler.serverError({ name: 'get_articles', req, res })
+            return responseHandler.serverError({ name: 'admin_get_articles', req, res })
         }
 
     }
@@ -569,6 +569,88 @@ class Admin {
 
     }
 
+
+    async get_customers(req, res) {
+        try {
+
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'admin_get_customers', req, res, payload: req.query })
+            if (isPayloadInvalid) return isPayloadInvalid
+
+            const {
+                id,
+                columns,
+                search,
+                page,
+                limit
+
+
+            } = req.query
+
+            let filter = {
+                1: 1
+            }
+
+            if (id) filter.id = id
+
+            const get_query = FieldsUpdate.prepareQueryGeneratore({
+                METHOD: 'SELECT',
+                SELECT: "id, org_id, google_id, name, email, status, role_type, onboarding_status, created_at, updated_at",
+                TABEL: mysqlTables.USERS,
+                VALID: filter
+            })
+
+            let response = await runPreparedQuery(get_query.query, get_query.value)
+            response = response || []
+
+            let org_ids = response.map(r => r.org_id)
+
+            if (org_ids.length) {
+                let subscription_query = {
+                    org_id: {
+                        "$in": org_ids
+                    },
+                    expires_at: {
+                        '$gt': new Date().getTime()
+                    }
+                }
+                let subscription_response = await req.mongoDB.find(mysqlTables.SUBSCRIPTIONS, subscription_query)
+                subscription_response = subscription_response.items
+
+                if (subscription_response && subscription_response.length) {
+
+                    response = response.map(r => {
+
+                        let subscription = subscription_response.find(s => s.org_id == r.org_id)
+
+                        if (subscription) {
+
+                            r.is_freeplan = subscription.plan_details?.is_freeplan || true
+                            r.plan_name = subscription.plan_details?.name || ""
+                            r.plan_duration = subscription.subscription_details?.payment_frequency_interval || 'Free'
+                            r.subscription_id = subscription.subscription_id
+                            r.subscription_status = subscription.payment_status
+
+                            r.subscribed_at = subscription.created_at
+                            r.subscription_expires_at = subscription.expires_at
+                        }
+
+                        return r
+                    })
+                }
+            }
+
+            return responseHandler.successRequest({
+                name: 'admin_get_customers',
+                req, res,
+                message: "Customers retrived successfully!",
+                data: response
+            })
+        }
+        catch (err) {
+            console.log(err);
+            return responseHandler.serverError({ name: 'admin_get_customers', req, res })
+        }
+    }
 }
 
 module.exports = Admin;

@@ -16,6 +16,8 @@ Routes.post('/articles/generate-title', verifytoken.verify, adminController.gene
 Routes.delete('/articles', verifytoken.verify, adminController.delete_article)
 
 
+Routes.get('/customers', verifytoken.verify, adminController.get_customers)
+
 Routes.get('/plans', verifytoken.verify, adminController.get_plans)
 Routes.post('/plans', verifytoken.verify, adminController.create_plan)
 Routes.put('/plans', verifytoken.verify, adminController.update_plan)

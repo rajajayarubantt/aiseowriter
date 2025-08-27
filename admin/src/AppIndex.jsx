@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 /*Pages*/
 import Articles from "./pages/articles";
 import Plans from "./pages/plans";
+import Customers from "./pages/customers";
 
 /*Assets*/
 import Images from "./assets/Images";
@@ -69,6 +70,7 @@ const AppIndex = () => {
       <Sidebars menus={NavMenus} userdetails={Userdetails} credit_limit={10} logout_callback={handleLogoutCallback} />
       <div className="app-container-content">
         <Routes>
+          <Route exact path={`/customer/*`} element={<Customers />}></Route>
           <Route exact path={`/articles/*`} element={<Articles />}></Route>
           <Route exact path={`/plans/*`} element={<Plans />}></Route>
         </Routes>

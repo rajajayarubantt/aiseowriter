@@ -31,10 +31,10 @@ class Base(ABC):
         
         for d in data:
             if d['time'] >= int(time.time()) - MINUTE_SECONDS:
-                current_min_requests += d['count']
-                current_min_tokens += d['tokens']
+                current_min_requests += d.get("count", 0)
+                current_min_tokens += d.get("tokens", 0)
             if d['time'] >= int(time.time()) - DAY_SECONDS:
-                today_total_requests += d['count']
+                today_total_requests += d.get("count", 0)
 
         if today_total_requests == 0 and current_min_requests == 0 and current_min_tokens == 0:
             return True
