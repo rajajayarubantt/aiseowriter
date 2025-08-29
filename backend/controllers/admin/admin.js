@@ -651,6 +651,191 @@ class Admin {
             return responseHandler.serverError({ name: 'admin_get_customers', req, res })
         }
     }
+
+    async delete_customer(req, res) {
+        try {
+            const isPayloadInvalid = await payloadValidator.Validate({ name: 'admin_delete_customer', req, res, payload: req.params })
+            if (isPayloadInvalid) return isPayloadInvalid
+
+            const { id } = req.params
+
+            let response = await req.mongoDB.deleteOne(mysqlTables.USERS, { id })
+            if (!response.acknowledged || !response.deletedCount) return responseHandler.failedRequest({
+                name: 'admin_delete_customer',
+                req, res,
+                message: "Failed to delete customer, Please try again!"
+            })
+
+            return responseHandler.successRequest({
+                name: 'admin_delete_customer',
+                req, res,
+                message: "Customer deleted successfully!",
+            })
+        }
+        catch (err) {
+            console.log(err);
+            return responseHandler.serverError({ name: 'admin_delete_customer', req, res })
+        }
+    }
+
+    async get_dashboard(req, res) {
+        try {
+
+            const kpi_data = {
+                total_users: 0,
+                total_paid_users: 0,
+                total_free_users: 0,
+
+                total_articles: 0,
+                total_mrr: 0,
+            }
+
+            const subscription_plan_ration = {}
+            const keywords_ration = {}
+            const integration_ration = {}
+
+            const subscriptions_trend = {}
+            const articles_trend = {}
+
+            const get_users = FieldsUpdate.prepareQueryGeneratore({
+                METHOD: 'SELECT',
+                SELECT: `id, name, email, org_id, created_at`,
+                TABEL: mysqlTables.USERS,
+                VALID: {
+                    role_type: "admin"
+                }
+            })
+
+            let get_users_res = await runPreparedQuery(get_users.query, get_users.value)
+            get_users_res = get_users_res || []
+
+
+            let get_article_query = {}
+
+            let get_article_options = {
+                projection: {
+                    org_id: 1,
+                    keywords: 1,
+                    created_at: 1,
+                    brand_id: 1,
+                }
+            }
+
+            let article_response = await req.mongoDB.find(mysqlTables.MONGO_BLOGS, get_article_query, get_article_options)
+            article_response = article_response.items || []
+
+            let get_subscription_query = {
+                expires_at: {
+                    '$gt': new Date().getTime()
+                }
+            }
+            let get_subscription_options = {
+                projection: {
+                    subscription_id: 1,
+                    created_at: 1,
+                    'plan_details.name': 1,
+                    'plan_details.is_freeplan': 1,
+                    'plan_details.blog_count': 1,
+                    'plan_details.image_count': 1,
+                    'plan_details.sitemap_count': 1,
+                    'plan_details.users_count': 1,
+                    'plan_details.monthly_price': 1,
+                }
+            }
+
+            let subscription_response = await req.mongoDB.find(mysqlTables.SUBSCRIPTIONS, get_subscription_query, get_subscription_options)
+            subscription_response = subscription_response.items || []
+
+            console.log(subscription_response);
+
+            const get_integrations = FieldsUpdate.prepareQueryGeneratore({
+                METHOD: 'SELECT',
+                SELECT: `id, name, status, created_at`,
+                TABEL: mysqlTables.BLOG_PLATFORMS,
+                VALID: {
+                    status: "Connected"
+                }
+            })
+
+            let get_integrations_res = await runPreparedQuery(get_integrations.query, get_integrations.value)
+            get_integrations_res = get_integrations_res || []
+
+            kpi_data.total_users = get_users_res.length
+            kpi_data.total_free_users = subscription_response.filter(r => r.plan_details.is_freeplan).length
+            kpi_data.total_paid_users = subscription_response.filter(r => r.subscription_id != "free").length
+
+            kpi_data.total_articles = article_response.length
+            kpi_data.total_mrr = subscription_response.reduce((acc, curr) => acc + (curr.plan_details.monthly_price || 0), 0)
+
+            subscription_response.forEach(r => {
+                const plan_name = r.plan_details.name || 'Free'
+                subscription_plan_ration[plan_name] = (subscription_plan_ration[plan_name] || 0) + 1
+
+                // convert this r.created_at to that days start
+                const createdAt = new Date(r.created_at)
+                createdAt.setHours(0, 0, 0, 0)
+
+
+
+                subscriptions_trend[createdAt.getTime()] = subscriptions_trend[createdAt.getTime()] || 0
+                subscriptions_trend[createdAt.getTime()] += r.plan_details.monthly_price || 0
+            })
+
+            article_response.forEach(r => {
+                const keywords = r.keywords || []
+                keywords.forEach(keyword => {
+                    keywords_ration[String(keyword).trim()] = (keywords_ration[String(keyword).trim()] || 0) + 1
+                })
+
+                const createdAt = new Date(r.created_at)
+                createdAt.setHours(0, 0, 0, 0)
+
+                articles_trend[createdAt.getTime()] = articles_trend[createdAt.getTime()] || 0
+                articles_trend[createdAt.getTime()] += 1
+            })
+
+            get_integrations_res.forEach(r => {
+                const integration_name = r.name || 'Unknown'
+                integration_ration[integration_name] = (integration_ration[integration_name] || 0) + 1
+
+            })
+
+            const users_analytics = get_users_res.map(user => {
+                const org_id = user.org_id || 'Unknown'
+                const articles_count = article_response.filter(a => a.org_id == org_id).length
+
+                const subscription_plan = subscription_response.find(s => s.org_id == org_id)
+
+                user.subscription_plan = 'Free'
+                if (subscription_plan && subscription_plan.plan_details && subscription_plan.plan_details.name) {
+                    user.subscription_plan = subscription_plan.plan_details.name || 'Free'
+                }
+
+                user.article_count = articles_count
+
+                return user
+            }).sort((a, b) => b.article_count - a.article_count)
+
+            return responseHandler.successRequest({
+                name: 'admin_get_dashboard',
+                req, res,
+                message: "Dashboard data retrieved successfully!",
+                data: {
+                    kpi_data,
+                    users_analytics,
+                    articles_trend,
+                    subscriptions_trend,
+                    subscription_plan_ration,
+                    keywords_ration,
+                    integration_ration
+                }
+            })
+        }
+        catch (err) {
+            console.log(err);
+            return responseHandler.serverError({ name: 'admin_get_dashboard', req, res })
+        }
+    }
 }
 
 module.exports = Admin;

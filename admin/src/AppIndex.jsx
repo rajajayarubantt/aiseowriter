@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 
 /*Pages*/
+import Dashboard from "./pages/dashboard";
 import Articles from "./pages/articles";
 import Plans from "./pages/plans";
 import Customers from "./pages/customers";
@@ -24,14 +25,14 @@ const AppIndex = () => {
   const [NavMenus, setNavMenus] = useState({
     top: [
       {
+        id: "dashboard",
+        label: "Dashboard",
+        icon: Icons.default.analytics,
+      },
+      {
         id: "customer",
         label: "Customer",
         icon: Icons.default.users,
-      },
-      {
-        id: "articles",
-        label: "Articles",
-        icon: Icons.default.articles,
       },
       {
         id: "plans",
@@ -70,6 +71,7 @@ const AppIndex = () => {
       <Sidebars menus={NavMenus} userdetails={Userdetails} credit_limit={10} logout_callback={handleLogoutCallback} />
       <div className="app-container-content">
         <Routes>
+          <Route exact path={`/dashboard/*`} element={<Dashboard />}></Route>
           <Route exact path={`/customer/*`} element={<Customers />}></Route>
           <Route exact path={`/articles/*`} element={<Articles />}></Route>
           <Route exact path={`/plans/*`} element={<Plans />}></Route>

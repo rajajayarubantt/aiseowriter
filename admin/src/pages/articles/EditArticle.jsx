@@ -105,7 +105,7 @@ const EditArticle = () => {
                     setGenerating(false)
                 }
                 else setGeneratingPercent(GeneratingPercent + 1)
-            }, 50)
+            }, 600)
         }
     }, [GeneratingPercent, Generating])
 

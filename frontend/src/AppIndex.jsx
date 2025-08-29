@@ -93,13 +93,15 @@ const AppIndex = () => {
         disable: true,
       },
       {
-        id: "feature-requests",
+        id: "https://aiseowriter.canny.io/feature-requests",
         label: "Give feedback",
+        link: true,
         icon: Icons.default.feedback,
       },
       {
-        id: "micro-tools",
-        label: "Micro tools",
+        id: "https://aiseowrite.in/blog",
+        label: "Marketing Guide",
+        link: true,
         icon: Icons.default.guide,
       },
       {
@@ -108,8 +110,9 @@ const AppIndex = () => {
         icon: Icons.default.billing,
       },
       {
-        id: "help-center",
+        id: "mailto:help.aiseowriter@gmail.com",
         label: "Help center",
+        link: true,
         icon: Icons.default.help,
       },
     ]

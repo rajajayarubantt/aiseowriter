@@ -19,6 +19,7 @@
 @import url(./top_cards.css);
 @import url(./smartTopCards.css);
 @import url(./drawer.css);
+@import url(./dashboard.css);
 
 /* Pages CSS Imports */
 @import url(./auth/auth.css);

@@ -24,8 +24,13 @@ const Index = ({ menus, userdetails, credit_limit = 0, logout_callback = () => {
   const [EnableMobileView, setEnableMobileView] = useState(false);
 
   const handleNavItemClick = (item) => {
-    navigate(`/${item.id}`);
-    setSelectedNavItem(item.id);
+    if (item.link) {
+      window.open(item.id, "_blank");
+    } else {
+      navigate(`/${item.id}`);
+      setSelectedNavItem(item.id);
+    }
+
     setEnableMobileView(false)
   };
 
