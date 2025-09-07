@@ -44,7 +44,7 @@ class WebhookController:
                 'X-SECRET': f'{api_key}',
                 'Content-Type': 'application/json'
             }
-            html_content = markdown.markdown(content, extensions=['extra', 'codehilite', 'toc'])
+            html_content = markdown.markdown(content)
 
             post_data = {
                 "title": title,
