@@ -30,10 +30,13 @@ class Platforms {
 
             let response = await platfromHandler.post({ org_id, article_id, platform })
 
-            if (!response.status) return responseHandler.failedRequest({
+            response = response.data
+
+
+            if (!response.success) return responseHandler.failedRequest({
                 name: 'post_platform',
                 req, res,
-                message: "Failed to post!",
+                message: "Failed to post, Please check! " + response.message,
             })
 
             return responseHandler.successRequest({

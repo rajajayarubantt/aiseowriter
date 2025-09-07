@@ -18,6 +18,7 @@ import Utils from "../../helpers/utils";
 import dayjs from 'dayjs';
 
 import ConnectWordpress from './ConnectWordpress'
+import ConnectWebhook from './ConnectWebhook'
 import ConnectShopify from './ConnectShopify'
 import ConnectGhost from './ConnectGhost'
 import UpdateGhostDetails from './UpdateGhostDetails'
@@ -52,6 +53,7 @@ const Index = () => {
     const [ShowUpdateWebflowDetails, setShowUpdateWebflowDetails] = useState(false)
     const [ShowUpdateWordpressDetails, setShowUpdateWordpressDetails] = useState(false)
     const [ShowUpdateNotionDetails, setShowUpdateNotionDetails] = useState(false)
+    const [ShowConnectWebhook, setShowConnectWebhook] = useState(false)
 
     const [GhostDetails, setGhostDetails] = useState(undefined)
     const [WebflowDetails, setWebflowDetails] = useState(undefined)
@@ -104,6 +106,14 @@ const Index = () => {
             img: Images.apps.Webflow,
             name: 'Webflow',
             desc: `Streamline your content flow into Webflow with one click.`,
+            has_connected: false,
+            has_settings: true,
+        },
+        {
+            id: 'webhook',
+            img: Images.apps.Webhook,
+            name: 'Webhook',
+            desc: `Streamline your content flow into Webhook with one click.`,
             has_connected: false,
             has_settings: true,
         },
@@ -254,6 +264,7 @@ const Index = () => {
     const triggerConnectWordpress = () => setShowConntetWordpress(true)
     const triggerConnectShopify = () => setShowConntetShopify(true)
     const triggerConnectGhost = () => setShowConntetGhost(true)
+    const triggerConnectWebhook = () => setShowConnectWebhook(true)
     const triggerUpdateGhostDetails = () => setShowUpdateGhostDetails(true)
     const triggerUpdateWebflowDetails = () => setShowUpdateWebflowDetails(true)
     const triggerUpdateWordpressDetails = () => setShowUpdateWordpressDetails(true)
@@ -287,6 +298,7 @@ const Index = () => {
         getAppConnections()
 
     }
+
     const connectGhost = async (params) => {
 
         if (!params) return setShowConntetGhost(false)
@@ -375,6 +387,7 @@ const Index = () => {
         if (!app || !params) {
             setShowConntetGhost(false)
             setShowUpdateWebflowDetails(false)
+            setShowConnectWebhook(false)
             return
         }
 
@@ -402,7 +415,9 @@ const Index = () => {
         setShowUpdateWebflowDetails(false)
         setShowUpdateWordpressDetails(false)
         setShowUpdateNotionDetails(false)
+        setShowConnectWebhook(false)
 
+        getAppConnections()
     }
 
     const handleConnectCallback = (item) => {
@@ -417,6 +432,7 @@ const Index = () => {
         else if (id == 'wordpress') triggerConnectWordpress()
         else if (id == 'shopify') triggerConnectShopify()
         else if (id == 'ghost') triggerConnectGhost()
+        else if (id == 'webhook') triggerConnectWebhook()
     }
 
     const handleDeleteConnect = async (item) => {
@@ -584,6 +600,7 @@ const Index = () => {
                 : null}
 
             {ShowConntetWordpress && <ConnectWordpress callback={connectWordpress} />}
+            {ShowConnectWebhook && <ConnectWebhook callback={(v) => updateDetails('webhook', v)} />}
             {ShowConntetShopify && <ConnectShopify callback={connectShopify} />}
             {ShowConntetGhost && <ConnectGhost callback={connectGhost} />}
             {ShowUpdateGhostDetails && <UpdateGhostDetails details={GhostDetails} callback={(v) => updateDetails('ghost', v)} />}

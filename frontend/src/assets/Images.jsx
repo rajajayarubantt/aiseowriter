@@ -15,6 +15,7 @@ import Integ_Webflow from './images/integrations/webflow.webp'
 import Integ_Wordpress from './images/integrations/wordpress.webp'
 import Integ_WordpressOrg from './images/integrations/wordpress.org.png'
 import Integ_Zapier from './images/integrations/zapier.webp'
+import Integ_WebHook from './images/integrations/webhook.png'
 
 
 
@@ -40,6 +41,7 @@ const Images = {
         Ghost: Integ_Ghost,
         Blogger: Integ_Blogger,
         Notion: Integ_Notion,
+        Webhook: Integ_WebHook,
     },
     integrations: [
         {
@@ -115,6 +117,13 @@ const Images = {
             selected: false,
             img: Integ_Notion
         },
+        {
+            label: 'Webhook',
+            value: 'webhook',
+            selected: false,
+            coming_soon: false,
+            img: Integ_WebHook
+        }
     ],
 
 }

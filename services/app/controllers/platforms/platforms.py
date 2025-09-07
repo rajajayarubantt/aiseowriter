@@ -7,6 +7,7 @@ from app.controllers.platforms.webflow import WebflowController
 from app.controllers.platforms.wordpress import WordPressController
 from app.controllers.platforms.wordpress_org import WordPressOrgController
 from app.controllers.platforms.notion import NotionController
+from app.controllers.platforms.webhook import WebhookController
 
 class PlatformsController:
 
@@ -22,6 +23,7 @@ class PlatformsController:
         self.wordPressController = WordPressController(app)
         self.wordPressOrgController = WordPressOrgController(app)
         self.notionController = NotionController(app)
+        self.webhookController = WebhookController(app)
 
     
     def _post(self, params):
@@ -32,7 +34,18 @@ class PlatformsController:
         if not platform or not org_id or not article_id:
             return {"success": False, "message": f'Invalid params!'}
 
-        article_res = self.mongo_db.find_one("blogs", {"org_id": org_id, "_id": ObjectId(article_id)}, {'title': 1, 'cover_image': 1, 'content': 1})
+        article_res = self.mongo_db.find_one(
+            "blogs", {"org_id": org_id, "_id": ObjectId(article_id)}, 
+            {
+                'title': 1, 
+                'meta_description': 1, 
+                'cover_image': 1, 
+                'content': 1,
+                'keywords': 1,
+                'language': 1,
+                'article_schema': 1,
+                'faq_schema': 1,
+            })
 
         if not article_res:
             return {"success": False, "message": f'Article not found!'}
@@ -41,9 +54,11 @@ class PlatformsController:
             'title': article_res.get('title', ''),
             'content': article_res.get('content', ''),
             'cover_image': article_res.get('cover_image', {}),
+            'keywords': article_res.get('keywords', []),
+            'language': article_res.get('language', ''),
+            'article_schema': article_res.get('article_schema', {}),
+            'faq_schema': article_res.get('faq_schema', {}),
         }
-
-        # print(data, 'data \n')
 
         return self.post(platform, org_id, data)
 
@@ -61,5 +76,7 @@ class PlatformsController:
             return self.wordPressOrgController.create_post(org_id, data)
         elif platform == 'notion':
             return self.notionController.create_post(org_id, data)
+        elif platform == 'webhook':
+            return self.webhookController.create_post(org_id, data)
 
         return {"success": False, "message": f'Failed to match platform: {platform}!'}

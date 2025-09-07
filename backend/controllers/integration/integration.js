@@ -177,6 +177,7 @@ class Integration {
 
             }
 
+
             if (app == 'linkedin') {
 
                 const auth_url = get_linkedin_auth_url(org_id)
@@ -217,6 +218,19 @@ class Integration {
                 })
             }
             else if (app == 'webflow') {
+
+                const auth_url = get_webflow_auth_url(org_id)
+
+                return responseHandler.successRequest({
+                    name: 'auth_integration',
+                    req, res,
+                    message: "Webflow connected successfully!",
+                    data: {
+                        auth_url
+                    },
+                })
+            }
+            else if (app == 'webhook') {
 
                 const auth_url = get_webflow_auth_url(org_id)
 
@@ -749,6 +763,84 @@ class Integration {
                     name: 'update_integration',
                     req, res,
                     message: "Notion details updated successfully!",
+
+                })
+            }
+            else if (app == 'webhook') {
+
+                const { secret_key, webhook_url } = details
+
+                const check_platform_query = FieldsUpdate.prepareQueryGeneratore({
+                    METHOD: 'SELECT',
+                    SELECT: 'id',
+                    TABEL: mysqlTables.BLOG_PLATFORMS,
+                    VALID: {
+                        '`key`': 'webhook',
+                        org_id: org_id
+                    }
+                })
+
+                let check_platform_response = await runPreparedQuery(check_platform_query.query, check_platform_query.value)
+                let is_exist = check_platform_response.length ? true : false
+
+
+                if (is_exist) {
+
+
+                    const { id } = check_platform_response[0]
+
+                    const query_data = {
+
+                        api_url: webhook_url,
+                        api_key: secret_key,
+
+                        status: "Connected",
+                        auth_type: 'api_key',
+
+                        last_synced: Utils.getCurrentTimeStamp(),
+                        updated_by_id: user_id,
+                        updated_by_name: user_name || user_email,
+                    }
+
+                    const update_query = FieldsUpdate.prepareQueryGeneratore({
+                        METHOD: 'UPDATE',
+                        TABEL: mysqlTables.BLOG_PLATFORMS,
+                        DATA: query_data,
+                        VALID: {
+                            id
+                        }
+                    })
+
+                    await runPreparedQuery(update_query.query, update_query.value)
+                }
+                else {
+                    const query_data = {
+                        name: 'Webhook',
+                        '`key`': 'webhook',
+                        status: "Connected",
+                        api_url: webhook_url,
+                        api_key: secret_key,
+                        org_id: org_id,
+
+                        last_synced: Utils.getCurrentTimeStamp(),
+                        created_by_id: user_id,
+                        created_by_name: user_name || user_email,
+                    }
+
+                    const insert_query = FieldsUpdate.prepareQueryGeneratore({
+                        METHOD: 'INSERT',
+                        TABEL: mysqlTables.BLOG_PLATFORMS,
+                        DATA: query_data
+                    })
+
+                    await runPreparedQuery(insert_query.query, insert_query.value)
+                }
+
+
+                return responseHandler.successRequest({
+                    name: 'update_integration',
+                    req, res,
+                    message: "Webhook details updated successfully!",
 
                 })
             }

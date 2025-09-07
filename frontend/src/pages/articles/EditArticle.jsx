@@ -104,6 +104,14 @@ const EditArticle = () => {
             desc: `Streamline your content flow into Webflow with one click.`,
             has_connected: false,
             has_settings: true,
+        },
+        {
+            id: 'webhook',
+            img: Images.apps.Webhook,
+            name: 'Webhooks',
+            desc: `Streamline your content flow into webhook with one click.`,
+            has_connected: false,
+            has_settings: true,
         }
     ])
     const [ExportOptions, setExportOptions] = useState([

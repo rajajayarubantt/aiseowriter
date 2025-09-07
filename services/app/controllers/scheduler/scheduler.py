@@ -246,34 +246,6 @@ class SchedulerController:
             blog_data['title'] = title[0]
             words_count = count_words(blog_data.get("content", ""))
 
-            print(f"\n ✅ Content Generated with {words_count} Words => {blog['id']}")
-
-            platform_response = []
-
-            for p in platforms:
-
-                print(f"\n 💠 Posting Content on {p} => {blog['id']}")
-
-                platform_res =  self.platformsController.post(
-                    platform=p,
-                    org_id=org_id,
-                    data=blog_data
-                )
-
-                success =  platform_res.get('success', False)
-                message =  platform_res.get('message', "")
-
-                if not success:
-                    print(f"\n ❌ Failed to post Content on {p} for => {blog['id']}")
-
-                print(f"\n ✅ Content Posted on {p} => {blog['id']}")
-                
-                platform_response.append({
-                    "status": success,
-                    "platform": p,
-                    "message": message
-                })
-            
             blog_data = {
                 "org_id": org_id,
                 "keywords": keywords,
@@ -302,6 +274,35 @@ class SchedulerController:
                 "created_by_id": created_by_id,
                 "created_by_name": created_by_name,
             }
+
+            print(f"\n ✅ Content Generated with {words_count} Words => {blog['id']}")
+
+            platform_response = []
+
+            for p in platforms:
+
+                print(f"\n 💠 Posting Content on {p} => {blog['id']}")
+
+                platform_res =  self.platformsController.post(
+                    platform=p,
+                    org_id=org_id,
+                    data=blog_data
+                )
+
+                success =  platform_res.get('success', False)
+                message =  platform_res.get('message', "")
+
+                if not success:
+                    print(f"\n ❌ Failed to post Content on {p} for => {blog['id']}")
+
+                print(f"\n ✅ Content Posted on {p} => {blog['id']}")
+                
+                platform_response.append({
+                    "status": success,
+                    "platform": p,
+                    "message": message
+                })
+            
 
             blog_response = self.mongo_db.insert_one("blogs", blog_data)
 

@@ -335,6 +335,20 @@ const PublicBlogs_Schemas = {
     projection: Joi.string().allow('', null),
     page: Joi.number().allow(null),
     limit: Joi.number().allow(null),
+  }),
+
+  post_public_blogs: Joi.object({
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+    content_markdown: Joi.string().allow('', null),
+    thumbnail_alt_text: Joi.string().allow('', null),
+    keywords: Joi.array().items(Joi.string()).allow('', null),
+    status: Joi.string().allow('', null),
+    thumbnail: Joi.string().allow('', null),
+    metadescription: Joi.string().allow('', null),
+    language_code: Joi.string().allow('', null),
+    article_schema: Joi.object().allow(null),
+    faq_schema: Joi.object().allow(null),
   })
 
 
