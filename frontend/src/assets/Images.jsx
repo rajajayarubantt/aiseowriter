@@ -19,7 +19,7 @@ import Integ_WebHook from './images/integrations/webhook.png'
 
 
 
-import Sitemap from './images/sitemap-links.webp'
+import Sitemap from './images/sitemaplinks.png'
 import Loading from './images/loading.gif'
 
 

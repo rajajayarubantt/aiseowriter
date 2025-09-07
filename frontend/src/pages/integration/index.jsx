@@ -158,7 +158,7 @@ const Index = () => {
             id: 'zapier',
             img: Images.apps.Zapier,
             name: 'Zapier',
-            desc: `Integrate with Zapier to connect BlogSEO with thousands of apps.`,
+            desc: `Integrate with Zapier to connect AiSEoWrite with thousands of apps.`,
             has_connected: false,
             has_settings: true,
             coming_soon: true,
