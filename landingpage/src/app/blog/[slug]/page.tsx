@@ -139,9 +139,10 @@ const ViewBlog: React.FC<ViewBlogProps> = async ({ params }) => {
           </div>
 
           {/* Article content */}
-          <div className="prose prose-lg max-w-none ">
-            <MDXRemote source={BlogData.content} />
-          </div>
+          <div
+            className="prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: BlogData.content }}
+          ></div>
 
           {/* Share buttons */}
           <div className="flex items-center gap-4 mt-12 pt-6 border-t">
