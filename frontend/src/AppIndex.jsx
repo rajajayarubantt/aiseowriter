@@ -110,8 +110,8 @@ const AppIndex = () => {
         icon: Icons.default.billing,
       },
       {
-        id: "mailto:help.aiseowriter@gmail.com",
-        label: "Help center",
+        id: "https://aiseowriter.featurebase.app/help",
+        label: "Help & Support",
         link: true,
         icon: Icons.default.help,
       },

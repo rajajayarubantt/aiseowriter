@@ -244,7 +244,7 @@ const CreateCampaign = ({ callback = () => { } }) => {
             return {
                 value: l.label,
                 label: l.label,
-                icon: l.icon
+                img: l.icon
             };
         });
     };
